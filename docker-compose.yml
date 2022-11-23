@@ -10,6 +10,13 @@ services:
     ports:
       - "8000:3000"
 
+  server:
+      build: ./server
+      ports:
+        - 8081:8081
+      volumes:
+        - ./server:/data
+
 volumes:
   app_node_modules:
   app_dotnuxt:
