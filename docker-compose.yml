@@ -17,6 +17,13 @@ services:
       volumes:
         - ./server:/data
 
+  server-database:
+    image: mongo
+    ports:
+      - 27017:27017
+    volumes:
+      - ./db:/data/db      
+
 volumes:
   app_node_modules:
   app_dotnuxt:
