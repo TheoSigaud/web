@@ -4,8 +4,6 @@ services:
     build: .
     volumes:
       - ./nuxt-app:/app
-      - app_node_modules:/app/node_modules
-      - app_dotnuxt:/app/.nuxt
     command: [yarn, run, dev]
     ports:
       - "8000:3000"

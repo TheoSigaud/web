@@ -20,7 +20,8 @@ db.once("open", function(callback){
 });
 
 
-app.get('/', (req, res) => {
+app.get('/test', (req, res) => {
+  console.log(req.body.title)
   res.status(200).send({ message: 'Working' });
 });
 
