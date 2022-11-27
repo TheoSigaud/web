@@ -1,31 +1,73 @@
 <template>
-  <div class="container">
+    <div>
+        <div class="container vh-100">
+            <div class="d-flex justify-content-center h-100 align-items-center">
+                <div v-if="!show" class="card" style="width: 18rem;">
+                    <div class="card-body">
+                        <h5 class="card-title text-center">Bienvenue</h5>
+                        <div>
+                            <input v-model="emailLogin" class="form-control mb-3 mt-4" type="email" placeholder="test@gmail.com">
+                            <input v-model="passwordLogin" class="form-control mb-3" type="password" placeholder="*****">
+                        </div>
 
-    <div class="jumbotron text-center">
-            <h1>Welcome to the <strong>VENoM</strong> Example Starter App</h1>
-            <p>Based on tutorial from <a target="_blank" href="https://medium.com/@anaida07/mevn-stack-application-part-1-3a27b61dcae0">here</a>.</p>
+                        <div class="d-flex align-items-center justify-content-between">
+                            <button type="button" class="btn btn-primary" @click="signInWithEmail">Connexion</button>
+                            <p class="m-0" @click="show = !show, register">Inscription</p>
+                        </div>
+                    </div>
+                </div>
 
-        <p>Fully loaded with Docker-compose for local development, hot reload, scss in templates, and more.</p>
-        <router-link v-bind:to="{ name: 'Posts' }" class="add_post_link">View Posts App</router-link>
+                <div v-if="show" class="card" style="width: 18rem;">
+                    <div class="card-body">
+                        <h5 class="card-title text-center">Bienvenue</h5>
+                        <div>
+                            <input v-model="emailRegister" class="form-control mb-3 mt-4" type="email" placeholder="test@gmail.com">
+                            <input v-model="passwordRegister" class="form-control mb-3" type="password" placeholder="*****">
+                            <input v-model="passwordConfirmRegister" class="form-control mb-3" type="password" placeholder="*****">
+                        </div>
+
+                        <p v-if="showError">Erreur mot de passe</p>
+
+                        <div class="d-flex align-items-center justify-content-between">
+                            <button type="button" class="btn btn-primary" @click="register">S'inscrire</button>
+                            <p class="m-0" @click="show = !show">Connexion</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-
-</div>
 </template>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style lang="scss" scoped>
-h1, h2 {
-  font-weight: normal;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
-</style>
+<script>
+  import UsersService from '@/services/UsersService'
+
+  export default {
+    name: "Hello",
+
+    data () {
+      return {
+        show: false,
+        emailLogin: null,
+        passwordLogin: null,
+        emailRegister: null,
+        passwordRegister: null,
+        passwordConfirmRegister: null,
+        showError: false,
+      }
+    },
+
+    methods: {
+      async register() {
+        const response = await UsersService.register({
+          email: this.emailRegister,
+          password: this.passwordRegister,
+        });
+      },
+
+      async signInWithEmail() {
+
+      }
+    }
+  }
+</script>
