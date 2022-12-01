@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="container vh-100">
-            <div class="d-flex justify-content-center h-100 align-items-center">
+            <div class="d-flex flex-column justify-content-center h-100 align-items-center">
                 <div v-if="!show" class="card" style="width: 18rem;">
                     <div class="card-body">
                         <h5 class="card-title text-center">Bienvenue</h5>
@@ -34,6 +34,8 @@
                         </div>
                     </div>
                 </div>
+
+                <p class="mt-3">{{success}}</p>
             </div>
         </div>
     </div>
@@ -54,6 +56,7 @@
         passwordRegister: null,
         passwordConfirmRegister: null,
         showError: false,
+        success: ''
       }
     },
 
@@ -62,7 +65,9 @@
         const response = await UsersService.register({
           email: this.emailRegister,
           password: this.passwordRegister,
-        });
+        }).then(() => {
+          this.success = 'Inscription réussie'
+        })
       },
 
       async signInWithEmail() {

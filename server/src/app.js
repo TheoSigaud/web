@@ -2,16 +2,17 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const cors = require('cors')
 const morgan = require('morgan')
-let bcrypt = require('bcrypt');
+const jwt = require("jsonwebtoken")
+const bcrypt = require('bcrypt')
+const auth = require("./middleware/auth");
 
-var User = require("../models/users");
+let User = require("../models/users");
 
 const app = express()
 app.use(morgan('combined'))
 app.use(bodyParser.json())
 app.use(cors())
 
-// DB Setup
 let mongoose = require('mongoose');
 
 let DATABASE_URL = process.env.DATABASE_URL || 'http://localhost'
@@ -35,28 +36,65 @@ db.once("open", function(callback){
 });
 
 
-app.post('/register', (req, res) => {
+app.post('/register', async (req, res) => {
 
+  try {
+    const {email, password} = req.body;
 
-  let email = req.body.email;
-  let password = req.body.password;
+    if (!(email && password)) {
+      res.status(400).send("All input is required");
+    }
 
-  bcrypt.hash(password, 10, function(err, hash) {
-    let new_user = new User({
-      email: email,
-      password: hash
-    })
+    const oldUser = await User.findOne({email});
 
-    new_user.save(function (error) {
-      if (error) {
-        console.log(error)
-      }
-      res.status(200).send({
-        success: true,
-        message: 'User saved successfully!'
-      })
-    })
-  })
+    if (oldUser) {
+      return res.status(409).send("User Already Exist. Please Login");
+    }
+
+    const encryptedPassword = await bcrypt.hash(password, 10);
+
+    await User.create({
+      email: email.toLowerCase().trim(),
+      password: encryptedPassword,
+    });
+
+    res.status(201).send({
+      message: 'User saved successfully!'
+    });
+  } catch (err) {
+    console.log(err);
+  }
 })
+
+app.post("/login", async (req, res) => {
+
+  try {
+
+    const { email, password } = req.body;
+
+    if (!(email && password)) {
+      res.status(400).send("All input is required");
+    }
+
+    const user = await User.findOne({ email });
+
+    if (user && (await bcrypt.compare(password, user.password))) {
+      const token = jwt.sign(
+          { user_id: user._id, email },
+          process.env.TOKEN_KEY,
+          {
+            expiresIn: "2h",
+          }
+      );
+
+      user.token = token;
+
+      res.status(200).json(user);
+    }
+    res.status(400).send("Invalid Credentials");
+  } catch (err) {
+    console.log(err);
+  }
+});
 
 app.listen(process.env.PORT || 8081)
