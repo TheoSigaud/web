@@ -5,6 +5,8 @@ const morgan = require('morgan')
 const jwt = require("jsonwebtoken")
 const bcrypt = require('bcrypt')
 const auth = require("./middleware/auth");
+require("dotenv").config();
+
 
 let User = require("../models/users");
 
@@ -80,18 +82,23 @@ app.post("/login", async (req, res) => {
 
     if (user && (await bcrypt.compare(password, user.password))) {
       const token = jwt.sign(
-          { user_id: user._id, email },
+          {user_id: user._id, email},
           process.env.TOKEN_KEY,
           {
             expiresIn: "2h",
           }
       );
 
-      user.token = token;
+      const response = {
+        'id': user._id,
+        'email': user.email,
+        'token': token
+      }
 
-      res.status(200).json(user);
+      res.status(200).json(response);
+    }else{
+      res.status(400).send("Invalid Credentials");
     }
-    res.status(400).send("Invalid Credentials");
   } catch (err) {
     console.log(err);
   }

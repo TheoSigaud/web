@@ -71,7 +71,16 @@
       },
 
       async signInWithEmail() {
-
+        const response = await UsersService.login({
+          email: this.emailLogin,
+          password: this.passwordLogin,
+        }).then((res) => {
+          if (res.status === 200) {
+            console.log(res.data.token)
+            localStorage.setItem("token", res.data.token)
+          }
+        }).catch((e) => {
+        })
       }
     }
   }
