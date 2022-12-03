@@ -5,33 +5,37 @@
                 <div v-if="!show" class="card" style="width: 18rem;">
                     <div class="card-body">
                         <h5 class="card-title text-center">Bienvenue</h5>
-                        <div>
-                            <input v-model="emailLogin" class="form-control mb-3 mt-4" type="email" placeholder="test@gmail.com">
-                            <input v-model="passwordLogin" class="form-control mb-3" type="password" placeholder="*****">
-                        </div>
+                        <form v-on:submit.prevent="signInWithEmail">
+                          <div>
+                              <input v-model="emailLogin" class="form-control mb-3 mt-4" type="email" placeholder="test@gmail.com">
+                              <input v-model="passwordLogin" class="form-control mb-3" type="password" placeholder="*****">
+                          </div>
 
-                        <div class="d-flex align-items-center justify-content-between">
-                            <button type="button" class="btn btn-primary" @click="signInWithEmail">Connexion</button>
-                            <p class="m-0" @click="show = !show, register">Inscription</p>
-                        </div>
+                          <div class="d-flex align-items-center justify-content-between">
+                              <button class="btn btn-primary" @click="signInWithEmail" type="submit">Connexion</button>
+                              <p class="m-0" @click="show = !show">Inscription</p>
+                          </div>
+                        </form>
                     </div>
                 </div>
 
                 <div v-if="show" class="card" style="width: 18rem;">
                     <div class="card-body">
                         <h5 class="card-title text-center">Bienvenue</h5>
-                        <div>
-                            <input v-model="emailRegister" class="form-control mb-3 mt-4" type="email" placeholder="test@gmail.com">
-                            <input v-model="passwordRegister" class="form-control mb-3" type="password" placeholder="*****">
-                            <input v-model="passwordConfirmRegister" class="form-control mb-3" type="password" placeholder="*****">
-                        </div>
+                        <form v-on:submit.prevent="register">
+                          <div>
+                              <input v-model="emailRegister" class="form-control mb-3 mt-4" type="email" placeholder="test@gmail.com">
+                              <input v-model="passwordRegister" class="form-control mb-3" type="password" placeholder="*****">
+                              <input v-model="passwordConfirmRegister" class="form-control mb-3" type="password" placeholder="*****">
+                          </div>
 
-                        <p v-if="showError">Erreur mot de passe</p>
+                          <p v-if="showError">Erreur mot de passe</p>
 
-                        <div class="d-flex align-items-center justify-content-between">
-                            <button type="button" class="btn btn-primary" @click="register">S'inscrire</button>
-                            <p class="m-0" @click="show = !show">Connexion</p>
-                        </div>
+                          <div class="d-flex align-items-center justify-content-between">
+                              <button class="btn btn-primary" type="submit">S'inscrire</button>
+                              <p class="m-0" @click="show = !show">Connexion</p>
+                          </div>
+                        </form>
                     </div>
                 </div>
 
@@ -76,10 +80,13 @@
           password: this.passwordLogin,
         }).then((res) => {
           if (res.status === 200) {
-            console.log(res.data.token)
-            localStorage.setItem("token", res.data.token)
+            localStorage.setItem("tokenWeb", res.data.token)
+            this.$router.push({ name: 'Home' })
+          }else{
+            this.success = 'Identifiants incorrects'
           }
         }).catch((e) => {
+          this.success = 'Identifiants incorrects'
         })
       }
     }

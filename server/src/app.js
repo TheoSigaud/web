@@ -104,4 +104,18 @@ app.post("/login", async (req, res) => {
   }
 });
 
+app.post("/auth", async (req, res) => {
+  const token = req.body.token
+
+  if (!token) {
+    res.status(403).send("A token is required for authentication");
+  }
+  try {
+    req.user = jwt.verify(token, process.env.TOKEN_KEY);
+    res.status(200).send();
+  } catch (err) {
+    res.status(401).send("Invalid Token");
+  }
+});
+
 app.listen(process.env.PORT || 8081)
