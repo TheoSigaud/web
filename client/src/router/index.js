@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Hello from '@/views/Hello'
 import Home from '@/views/Home'
+import Dashboard from '@/views/admin/Dashboard'
 import MiddlewareService from '@/services/MiddlewareService'
 
 Vue.use(Router)
@@ -19,6 +20,11 @@ const router = new Router({
       path: '/home',
       component: Home,
       meta: {requiresAuth: true}
+    },
+    {
+      name: 'Dashboard',
+      path: '/admin/dashboard',
+      component: Dashboard,
     }
   ]
 })

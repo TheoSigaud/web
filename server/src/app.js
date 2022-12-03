@@ -83,7 +83,7 @@ app.post("/login", async (req, res) => {
 
     if (user && (await bcrypt.compare(password, user.password))) {
       const token = jwt.sign(
-          {user_id: user._id, email},
+          {user_id: user._id, email, user_role: user.role},
           process.env.TOKEN_KEY,
           {
             expiresIn: "2h",
@@ -93,6 +93,7 @@ app.post("/login", async (req, res) => {
       const response = {
         'id': user._id,
         'email': user.email,
+        'role': user.role,
         'token': token
       }
 
@@ -112,11 +113,17 @@ app.post("/auth", async (req, res) => {
     res.status(403).send("A token is required for authentication");
   }
   try {
-    req.user = jwt.verify(token, process.env.TOKEN_KEY);
-    res.status(200).send();
+    let user = jwt.verify(token, process.env.TOKEN_KEY);
+    res.status(200).send({
+      user: user
+    });
   } catch (err) {
     res.status(401).send("Invalid Token");
   }
+});
+
+app.post("/online", async (req, res) => {
+
 });
 
 app.listen(process.env.PORT || 8081)
