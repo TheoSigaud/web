@@ -58,6 +58,7 @@ app.post('/register', async (req, res) => {
     await User.create({
       email: email.toLowerCase().trim(),
       password: encryptedPassword,
+      role: 0
     });
 
     res.status(201).send({
