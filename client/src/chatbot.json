@@ -1,0 +1,36 @@
+{
+  "question": "Quelle type d'aide recherchez-vous ?",
+  "answers": [
+    {
+      "id": "0",
+      "question": "Voulez-vous vérifier l'entretien de votre véhicule ?",
+      "answers": [
+        {
+          "id": "0",
+          "question": "Voulez-vous vérifier l'entretien de votre véhicule ?",
+          "answers": []
+        },
+        {
+          "id": "1",
+          "question": "Voulez-vous vérifier l'entretien de votre véhicule ?",
+          "answers": []
+        }
+      ]
+    },
+    {
+      "id": "1",
+      "question": "Souhaitez-vous des informations sur les véhicules ?",
+      "answers": []
+    },
+    {
+      "id": "2",
+      "question": "Voulez-vous des informations pour nous contacter ?",
+      "answers": []
+    },
+    {
+      "id": "3",
+      "question": "Souhaitez-vous arrêter la conversation ?",
+      "answers": []
+    }
+  ]
+}
