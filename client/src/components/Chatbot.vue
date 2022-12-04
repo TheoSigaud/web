@@ -7,6 +7,10 @@
         <div v-for="answer in answers" :key="answer.id">
           <button class="btn btn-primary mb-4" @click="nextQuestion(answer.id)">{{answer.question}}</button>
         </div>
+        <div v-if="showInput">
+          <p>Ecrire</p>
+          <input type="text">
+        </div>
       </div>
     </div>
   </div>
@@ -22,7 +26,8 @@
       return {
         question: '',
         answers: [],
-        pathQuestion: null
+        pathQuestion: null,
+        showInput: false
       }
     },
 
@@ -37,6 +42,16 @@
         this.question = this.pathQuestion.answers[id].question
         this.answers = this.pathQuestion.answers[id].answers
         this.pathQuestion = this.pathQuestion.answers[id]
+
+        if (this.pathQuestion.input){
+          this.showInput = true
+        }
+      },
+
+      resetChatbot() {
+        this.question = chatbot.question
+        this.answers = chatbot.answers
+        this.pathQuestion = chatbot
       }
     }
   }

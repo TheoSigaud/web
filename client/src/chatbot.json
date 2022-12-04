@@ -4,15 +4,18 @@
     {
       "id": "0",
       "question": "Voulez-vous vérifier l'entretien de votre véhicule ?",
+      "input": false,
       "answers": [
         {
           "id": "0",
-          "question": "Voulez-vous vérifier l'entretien de votre véhicule ?",
+          "question": "1 ?",
+          "input": false,
           "answers": []
         },
         {
           "id": "1",
-          "question": "Voulez-vous vérifier l'entretien de votre véhicule ?",
+          "question": "2 ?",
+          "input": false,
           "answers": []
         }
       ]
