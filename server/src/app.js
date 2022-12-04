@@ -6,11 +6,19 @@ const jwt = require("jsonwebtoken")
 const bcrypt = require('bcrypt')
 const auth = require("./middleware/auth");
 require("dotenv").config();
+const app = express()
 
+const server = app.listen(8081)
+
+const io = require('socket.io')(server, {
+  cors: {
+    origin: "http://localhost:8080",
+    methods: ["GET", "POST"]
+  }
+});
 
 let User = require("../models/users");
 
-const app = express()
 app.use(morgan('combined'))
 app.use(bodyParser.json())
 app.use(cors())
@@ -126,4 +134,5 @@ app.post("/online", async (req, res) => {
 
 });
 
-app.listen(process.env.PORT || 8081)
+
+require("./socket")(io, app);
