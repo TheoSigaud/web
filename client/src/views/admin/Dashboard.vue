@@ -9,6 +9,7 @@
 </template>
 
 <script>
+  import io from 'socket.io-client';
   import ActionsService from '@/services/ActionsService'
   import MiddlewareService from '@/services/MiddlewareService'
 
@@ -17,21 +18,30 @@
 
     data () {
       return {
+        socket : io('http://localhost:8081/'),
         user: null
       }
     },
 
     async mounted() {
-      await MiddlewareService.auth({
-        token: localStorage.getItem("tokenWeb")
-      }).then((res) => {
-        this.user = res.data
-      })
+      // await MiddlewareService.auth({
+      //   token: localStorage.getItem("tokenWeb")
+      // }).then((res) => {
+      //   this.user = res.data
+      // })
+
+      await this.checkRequests()
     },
 
     methods: {
       async online() {
 
+      },
+
+      async checkRequests() {
+        this.socket.on('request', data => {
+          console.log(data)
+        })
       }
     }
   }

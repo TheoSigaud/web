@@ -39,6 +39,10 @@ module.exports = function (io, app) {
     //   // saving userId to object with socket ID
     //   users[socket.id] = data.userId;
     // });
+
+    socket.on('sendRequest', function(data){
+      socket.broadcast.emit('request', socket.id);
+    });
   
     // socket.on('disconnect', function(){
     //   console.log('user ' + users[socket.id] + ' disconnected');
