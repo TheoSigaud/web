@@ -1,59 +1,76 @@
 <template>
   <div>
-    <div class="container vh-100">
-      <div>
-        <p>{{question}}</p>
-
-        <div v-for="answer in answers" :key="answer.id">
-          <button class="btn btn-primary mb-4" @click="nextQuestion(answer.id)">{{answer.question}}</button>
-        </div>
-        <div v-if="showInput">
-          <p>Ecrire</p>
-          <input type="text">
-        </div>
-      </div>
+    <h3>{{ currentNode.question }}</h3>
+    <div v-if="currentNode.input === 'date'">
+      <input type="date" class="form-control" v-model="dateAppointment" />
+      <button class="btn btn-primary" @click="checkAppointement">Suivant</button>
     </div>
+    <div v-if="currentNode.input === 'km'">
+      <input type="number" class="form-control" v-model="kmAppointment" />
+      <button class="btn btn-primary" @click="checkKm">Suivant</button>
+    </div>
+    <p v-else>
+      <button v-for="(button, index) in currentNode.buttons" :key="index" @click="navigate(button.nextNode)" class="btn btn-primary m-2">
+        {{ button.label }}
+      </button>
+    </p>
+
+    <button class="btn btn-warning m-2" @click="reset" v-if="currentNode.restart">Restart</button>
   </div>
 </template>
 
 <script>
-  import chatbot from '../chatbot.json';
+  import chatData from '../chatbot.json';
 
   export default {
-    name: "Chatbot",
+    name: 'Chatbot',
 
-    data () {
+    data() {
       return {
-        question: '',
-        answers: [],
-        pathQuestion: null,
-        showInput: false
-      }
+        currentNode: null,
+        decisionTree: null,
+        dateAppointment: '',
+        kmAppointment: 0,
+      };
+    },
+    created() {
+      this.decisionTree = chatData;
+
+      this.currentNode = this.decisionTree;
     },
 
     mounted() {
-      this.question = chatbot.question
-      this.answers = chatbot.answers
-      this.pathQuestion = chatbot
+      this.currentNode = this.decisionTree['1'];
     },
 
     methods: {
-      nextQuestion(id) {
-        this.question = this.pathQuestion.answers[id].question
-        this.answers = this.pathQuestion.answers[id].answers
-        this.pathQuestion = this.pathQuestion.answers[id]
+      navigate(nodeId) {
+        this.currentNode = this.decisionTree[nodeId];
+      },
 
-        if (this.pathQuestion.input){
-          this.showInput = true
+      checkAppointement() {
+        let date = new Date(this.dateAppointment);
+        let diff = Date.now() - date.getTime();
+        let diffYears = diff / (1000 * 60 * 60 * 24 * 365);
+
+        if (diffYears >= 1) {
+          this.currentNode = this.decisionTree[8];
+        } else {
+          this.currentNode = this.decisionTree[9];
         }
       },
 
-      resetChatbot() {
-        this.question = chatbot.question
-        this.answers = chatbot.answers
-        this.pathQuestion = chatbot
+      checkKm() {
+        if (this.kmAppointment >= 10000) {
+          this.currentNode = this.decisionTree[8];
+        } else {
+          this.currentNode = this.decisionTree[10];
+        }
+      },
+
+      reset() {
+        this.currentNode = this.decisionTree['1'];
       }
     }
-  }
+  };
 </script>
-
