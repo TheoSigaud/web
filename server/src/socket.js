@@ -41,7 +41,12 @@ module.exports = function (io, app) {
     // });
 
     socket.on('sendRequest', function(data){
-      socket.broadcast.emit('request', socket.id);
+      socket.join(data.user.email);
+      socket.broadcast.emit('request', data);
+    });
+
+    socket.on('joinRoom', function(data){
+      socket.join(data);
     });
   
     // socket.on('disconnect', function(){
