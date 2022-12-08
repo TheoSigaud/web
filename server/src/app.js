@@ -9,6 +9,7 @@ require("dotenv").config();
 
 
 let User = require("../models/users");
+let Appointement = require("../models/appointement");
 
 const app = express()
 app.use(morgan('combined'))
@@ -124,6 +125,23 @@ app.post("/auth", async (req, res) => {
 
 app.post("/online", async (req, res) => {
 
+});
+
+app.post("/createAppointement", async (req, res) => {
+  const date = new Date(req.body.date)
+  let time = req.body.time
+  const [hours, minutes] = time.split(':');
+  const newDate = new Date();
+  time = new Date(newDate.getFullYear(), newDate.getMonth(), newDate.getDate(), hours, minutes);
+
+  await Appointement.create({
+    date: date,
+    time: time
+  });
+
+  res.status(201).send({
+    message: 'User saved successfully!'
+  });
 });
 
 app.listen(process.env.PORT || 8081)
