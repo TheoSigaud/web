@@ -5,10 +5,10 @@
 
             <button class="btn btn-primary">Se mettre en ligne</button>
 
-            <div v-for="user in users" :key="user" class="d-flex align-items-center">
+            <div v-for="(user, index) in users" :key="user" class="d-flex align-items-center">
               <p class="m-0">{{user}}</p>
               <button class="btn btn-primary me-3 ms-3" @click="join(user)">Accepter</button>
-              <buttoemailn class="btn btn-danger">Refuser</buttoemailn>
+              <button class="btn btn-danger" @click="reject(index)">Refuser</button>
             </div>
 
             <Chat />
@@ -57,6 +57,10 @@
 
       async join(user) {
         this.socket.emit('joinRoom', user)
+      },
+
+      async reject(index) {
+        this.users.splice(index, 1)
       }
     }
   }
