@@ -48,6 +48,11 @@ module.exports = function (io, app) {
     socket.on('joinRoom', function(data){
       socket.join(data);
     });
+
+    socket.on('sendMessage', function(data){
+      console.log(data);
+      socket.broadcast.emit('getMessages', data);
+    });
   
     // socket.on('disconnect', function(){
     //   console.log('user ' + users[socket.id] + ' disconnected');
