@@ -65,7 +65,6 @@
 </template>
 
 <script>
-  import io from 'socket.io-client';
   import ActionsService from '@/services/ActionsService'
   import MiddlewareService from '@/services/MiddlewareService'
   import Chat from "../../components/Chat";
@@ -75,7 +74,6 @@
     components: {Chat},
     data () {
       return {
-        socket : io('http://localhost:8081/'),
         name: null,
         max: null,
         maxUpdate: null,

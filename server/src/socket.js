@@ -52,6 +52,12 @@ module.exports = function (io, app) {
       socket.to(data).emit('requestAccepted', '');
     });
 
+    socket.on('joinRoomChat', function(data){
+      socket.join(data);
+      const usersRoom = io.sockets.adapter.rooms.get(data);
+      socket.to(data).emit('usersRoomChat', usersRoom);
+    });
+
     socket.on('sendMessage', (room, data) => {
       console.log(room);
       socket.to(room).emit('getMessages', data.text);
@@ -63,5 +69,5 @@ module.exports = function (io, app) {
     //   delete users[socket.id];
     // });
   });
-  
+
 }
