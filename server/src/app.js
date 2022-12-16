@@ -18,6 +18,7 @@ const io = require('socket.io')(server, {
 });
 
 let User = require("../models/users");
+let Room = require("../models/rooms");
 
 app.use(morgan('combined'))
 app.use(bodyParser.json())
@@ -132,6 +133,46 @@ app.post("/auth", async (req, res) => {
 
 app.post("/online", async (req, res) => {
 
+});
+
+app.post('/createRoom', async (req, res) => {
+
+  try {
+    const {name, max} = req.body;
+
+    if (!(name && max)) {
+      res.status(400).send("All input is required");
+    }
+
+    const oldRoom = await Room.findOne({name});
+
+    if (oldRoom) {
+      return res.status(409).send("Room Already Exist");
+    }
+
+    await Room.create({
+      name: name.trim(),
+      max: max
+    });
+
+    res.status(201).send({
+      message: 'Room saved successfully!'
+    });
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+app.get('/getRooms', (req, res) => {
+  Room.find({}, 'name max', function (error, rooms) {
+    if (error) {
+      console.error(error);
+    }
+
+    res.send({
+      rooms: rooms
+    })
+  }).sort({_id: -1})
 });
 
 require("./socket")(io, app);
