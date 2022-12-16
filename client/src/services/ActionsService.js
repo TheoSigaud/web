@@ -15,5 +15,9 @@ export default {
 
   deleteRoom (params) {
     return Api().post('deleteRoom', params)
+  },
+
+  updateRoom (params) {
+    return Api().post('updateRoom', params)
   }
 }

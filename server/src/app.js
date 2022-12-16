@@ -189,4 +189,21 @@ app.post('/deleteRoom', (req, res) => {
   });
 });
 
+app.post('/updateRoom', (req, res) => {
+  const {name, max} = req.body;
+
+  Room.findOne({name}, function (err, room) {
+    room.max = max;
+
+    room.save(function (err) {
+      if (err)
+        res.send(err)
+      res.send({
+        success: true
+      })
+    })
+  });
+});
+
+
 require("./socket")(io, app);

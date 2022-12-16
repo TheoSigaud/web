@@ -12,6 +12,7 @@
                 <p class="m-0 p-2">{{room.name}}</p>
                 <p class="m-0 p-2">{{room.max}} / personnes max</p>
                 <button class="btn btn-danger m-2" @click="deleteRoom(room.name)">Supprimer</button>
+                <button class="btn btn-primary m-2" @click="maxUpdate = room.max; nameUpdate = room.name" data-bs-toggle="modal" data-bs-target="#exampleModalUpdate">Modifier</button>
               </div>
             </div>
           </div>
@@ -41,6 +42,24 @@
               </div>
             </div>
           </div>
+
+          <div class="modal fade" id="exampleModalUpdate" tabindex="-1" aria-labelledby="exampleModalUpdateLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <form class="form-control" @submit.prevent="update">
+                    <label for="maxUpdate">Nombre maximum</label>
+                    <input type="number" id="maxUpdate" class="form-control" v-model="maxUpdate" :placeholder="maxUpdate">
+
+                    <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" aria-label="Close">Mettre à jour</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
     </div>
 </template>
@@ -59,6 +78,8 @@
         socket : io('http://localhost:8081/'),
         name: null,
         max: null,
+        maxUpdate: null,
+        nameUpdate: null,
         rooms: []
       }
     },
@@ -93,6 +114,15 @@
       async deleteRoom (name) {
         await ActionsService.deleteRoom({
           name: name
+        }).then(() => {
+          this.getRooms()
+        })
+      },
+
+      async update () {
+        await ActionsService.updateRoom({
+          name: this.nameUpdate,
+          max: this.maxUpdate
         }).then(() => {
           this.getRooms()
         })
