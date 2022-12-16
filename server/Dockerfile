@@ -1,4 +1,4 @@
-FROM node:carbon
+FROM node:17.9.0
 
 COPY ./docker/entrypoint.sh /entrypoint/
 
