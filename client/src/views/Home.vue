@@ -2,8 +2,10 @@
     <div>
       <div class="container vh-100">
         <h1>YOOOO</h1>
-        <button class="btn btn-primary" @click="sendRequest">Aide</button>
-        <Chat :email="user.user.email" v-if="user"/>
+        <button v-if="!sendReq" class="btn btn-primary" @click="sendRequest">Aide</button>
+        <p v-if="sendReq && !showChat">Une demande a été envoyé</p>
+        <p v-if="showChat">Vous êtes en communication avec un administrateur</p>
+        <Chat :email="user.user.email" v-if="showChat"/>
       </div>
     </div>
 </template>
@@ -17,7 +19,9 @@
     components: {Chat},
     data () {
       return {
-        user: null
+        user: null,
+        sendReq: false,
+        showChat: false
       }
     },
 
@@ -27,11 +31,16 @@
       }).then((res) => {
         this.user = res.data
       })
+
+      this.$socket.on('requestAccepted', message => {
+        this.showChat = true
+      })
     },
 
     methods: {
       async sendRequest() {
         this.$socket.emit('sendRequest', this.user)
+        this.sendReq = true
       }
     }
   }

@@ -49,6 +49,7 @@ module.exports = function (io, app) {
     socket.on('joinRoom', function(data){
       console.log(data);
       socket.join(data);
+      socket.to(data).emit('requestAccepted', '');
     });
 
     socket.on('sendMessage', (room, data) => {
