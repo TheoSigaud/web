@@ -175,4 +175,18 @@ app.get('/getRooms', (req, res) => {
   }).sort({_id: -1})
 });
 
+app.post('/deleteRoom', (req, res) => {
+  const {name} = req.body;
+
+  Room.deleteOne({
+    name: name
+  }, function(err, post){
+    if (err)
+      res.send(err)
+    res.send({
+      success: true
+    })
+  });
+});
+
 require("./socket")(io, app);

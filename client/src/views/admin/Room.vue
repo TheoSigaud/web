@@ -5,10 +5,13 @@
             Créer un salon
           </button>
 
+          <h3>Liste des salons</h3>
           <div v-if="rooms.length > 0" class="container">
             <div class="row d-flex justify-content-start">
-              <div v-bind:key="room.name" v-for="room in rooms">
-                <p>{{room.name}}</p>
+              <div class="d-flex flex-row card m-3 w-auto align-items-center" v-bind:key="room.name" v-for="room in rooms">
+                <p class="m-0 p-2">{{room.name}}</p>
+                <p class="m-0 p-2">{{room.max}} / personnes max</p>
+                <button class="btn btn-danger m-2" @click="deleteRoom(room.name)">Supprimer</button>
               </div>
             </div>
           </div>
@@ -86,6 +89,14 @@
         const response = await ActionsService.getRooms()
         this.rooms = response.data.rooms
       },
+
+      async deleteRoom (name) {
+        await ActionsService.deleteRoom({
+          name: name
+        }).then(() => {
+          this.getRooms()
+        })
+      }
     }
   }
 </script>
