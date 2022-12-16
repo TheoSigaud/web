@@ -34,6 +34,13 @@
       }
     },
 
+    created() {
+      this.$socket.on('usersRoomChat', message => {
+        this.users = message
+        console.log(this.users)
+      })
+    },
+
     async mounted() {
       await this.getRooms()
     },
@@ -43,6 +50,10 @@
         const response = await ActionsService.getRooms()
         this.rooms = response.data.rooms
       },
+
+      async joinRoom (name) {
+        this.$socket.emit('joinRoomChat', name)
+      }
     },
   }
 </script>

@@ -30,26 +30,19 @@
       }
     },
 
+    created() {
+      this.$socket.on('usersRoomChat', message => {
+        this.users = message
+        console.log(this.users)
+      })
+    },
 
-    async mounted() {
+    mounted() {
       this.codeRoom = this.$route.params.code;
 
-      await this.joinRoom();
-
-      await this.getUsers();
+      this.$socket.emit('joinRoomChat', this.nameRoom)
     },
     methods: {
-
-      async joinRoom() {
-        this.$socket.emit('joinRoomChat', this.nameRoom)
-      },
-
-      async getUsers() {
-        this.$socket.on('usersRoomChat', message => {
-          this.users = message
-          console.log(this.users)
-        })
-      },
     }
   }
 </script>
