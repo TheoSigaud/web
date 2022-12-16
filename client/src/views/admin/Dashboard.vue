@@ -11,7 +11,7 @@
               <button class="btn btn-danger" @click="reject(index)">Refuser</button>
             </div>
 
-            <Chat />
+            <Chat v-if="currentRoom" :email="currentRoom"/>
         </div>
     </div>
 </template>
@@ -28,7 +28,8 @@
     data () {
       return {
         socket : io('http://localhost:8081/'),
-        users: []
+        users: [],
+        currentRoom: null
       }
     },
 
@@ -56,6 +57,7 @@
       },
 
       async join(user) {
+        this.currentRoom = user
         this.socket.emit('joinRoom', user)
       },
 

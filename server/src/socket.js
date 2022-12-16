@@ -41,17 +41,19 @@ module.exports = function (io, app) {
     // });
 
     socket.on('sendRequest', function(data){
+      console.log(data.user.email);
       socket.join(data.user.email);
       socket.broadcast.emit('request', data);
     });
 
     socket.on('joinRoom', function(data){
+      console.log(data);
       socket.join(data);
     });
 
-    socket.on('sendMessage', function(data){
-      console.log(data);
-      socket.broadcast.emit('getMessages', data);
+    socket.on('sendMessage', (room, data) => {
+      console.log(room);
+      socket.to(room).emit('getMessages', data.text);
     });
   
     // socket.on('disconnect', function(){

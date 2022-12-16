@@ -6,8 +6,7 @@ import router from './router'
 import { io } from "socket.io-client"
 
 const socket = io("ws://localhost:8081")
-const host = "http://localhost:8080";
-
+Vue.prototype.$socket = socket;
 // socket.on("connect", () => {
 //   console.log("Connected to the socket")
 // })

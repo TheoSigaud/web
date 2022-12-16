@@ -3,14 +3,13 @@
       <div class="container vh-100">
         <h1>YOOOO</h1>
         <button class="btn btn-primary" @click="sendRequest">Aide</button>
-        <Chat />
+        <Chat :email="user.user.email" v-if="user"/>
       </div>
     </div>
 </template>
 
 <script>
   import MiddlewareService from '@/services/MiddlewareService'
-  import io from "socket.io-client";
   import Chat from "../components/Chat";
 
   export default {
@@ -18,7 +17,6 @@
     components: {Chat},
     data () {
       return {
-        socket : io('http://localhost:8081/'),
         user: null
       }
     },
@@ -33,7 +31,7 @@
 
     methods: {
       async sendRequest() {
-        this.socket.emit('sendRequest', this.user)
+        this.$socket.emit('sendRequest', this.user)
       }
     }
   }
