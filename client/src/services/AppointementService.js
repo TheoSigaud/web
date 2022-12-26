@@ -1,11 +1,15 @@
 import Api from '@/services/Api'
 
 export default {
-  createAppointement (params) {
+  createAppointement(params) {
     return Api().post('createAppointement', params)
   },
 
-  deleteAppointement (params) {
+  fetchAppointements() {
+    return Api().get('getAppointements')
+  },
+
+  deleteAppointement(params) {
     return Api().post('deleteAppointement', params)
   }
 }

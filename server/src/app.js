@@ -144,4 +144,36 @@ app.post("/createAppointement", async (req, res) => {
   });
 });
 
+app.get('/getAppointements', (req, res) => {
+  Appointement.find({}, 'date time', function (error, appointements) {
+    if (error) {
+      console.error(error);
+    }
+
+    let newAppointements = appointements.map((appointement) => {
+        return {
+            _id: appointement._id,
+            date: appointement.date.toISOString().slice(0, 10),
+            time: appointement.time.toISOString().slice(11, 16)
+        }
+    });
+
+    res.send({
+      appointments: newAppointements
+    })
+  }).sort({_id: -1})
+});
+
+app.post('/deleteAppointement', (req, res) => {
+  Appointement.remove({
+    _id: req.body.id
+  }, function(err, post){
+    if (err)
+      res.send(err)
+    res.send({
+      success: true
+    })
+  })
+});
+
 app.listen(process.env.PORT || 8081)

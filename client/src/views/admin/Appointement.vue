@@ -1,10 +1,9 @@
 <template>
   <div>
     <h1>Liste des rendez-vous</h1>
-    <ul v-for="appointment in appointments">
-      <li>{{appointment.date}} - {{appointment.time}} - {{appointment.description}}
-<!--        <button @click="editAppointment(appointment)">Modifier</button>-->
-<!--        <button @click="deleteAppointment(appointment)">Supprimer</button>-->
+    <ul v-for="appointment in appointments" :key="appointment._id">
+      <li>{{appointment.date}} - {{appointment.time}}
+        <button @click="deleteAppointment(appointment._id)">Supprimer</button>
       </li>
     </ul>
     <h2>Créer un rendez-vous</h2>
@@ -15,16 +14,6 @@
       <input type="time" v-model="newAppointment.time" id="time">
       <button type="submit">Créer rendez-vous</button>
     </form>
-<!--    <h2>Modifier un rendez-vous</h2>-->
-<!--    <form @submit.prevent="updateAppointment">-->
-<!--      <label for="date">Date:</label>-->
-<!--      <input type="date" v-model="editedAppointment.date" id="date">-->
-<!--      <label for="time">Heure:</label>-->
-<!--      <input type="time" v-model="editedAppointment.time" id="time">-->
-<!--      <label for="description">Description:</label>-->
-<!--      <input type="text" v-model="editedAppointment.description" id="description">-->
-<!--      <button type="submit">Modifier rendez-vous</button>-->
-<!--    </form>-->
   </div>
 </template>
 <script>
@@ -40,11 +29,12 @@ export default {
         date: '',
         time: '',
       },
-      // editedAppointment: {
-      //   date: '',
-      //   time: '',
-      // }
     }
+  },
+
+  async mounted() {
+    const response = await AppointementService.fetchAppointements()
+    this.appointments = response.data.appointments
   },
 
   methods: {
@@ -56,20 +46,14 @@ export default {
         this.success = 'Création réussie'
       })
     },
-    // editAppointment(appointment) {
-    //   this.editedAppointment = appointment
-    // },
-    // updateAppointment() {
-    //   this.socket.emit('update appointment', this.editedAppointment)
-    //   this.editedAppointment = {
-    //     date: '',
-    //     time: '',
-    //     description: ''
-    //   }
-    // },
-    // deleteAppointment(appointment) {
-    //   this.socket.emit('delete appointment', appointment)
-    // }
+
+    async deleteAppointment(id) {
+      await AppointementService.deleteAppointement({
+        id: id
+      })
+      const response = await AppointementService.fetchAppointements()
+      this.appointments = response.data.appointments
+    }
   }
 }
 </script>
