@@ -13,8 +13,8 @@ export default {
     return Api().get('getChatAppointements')
   },
 
-  updateAppointements() {
-    return Api().get('updateAppointement')
+  updateChatAppointment(params) {
+    return Api().post('updateAppointement', params)
   },
 
   deleteAppointement(params) {

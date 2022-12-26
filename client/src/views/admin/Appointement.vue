@@ -2,7 +2,7 @@
   <div>
     <h1>Liste des rendez-vous</h1>
     <ul v-for="appointment in appointments" :key="appointment._id">
-      <li>{{appointment.date}} - {{appointment.time}}
+      <li>{{appointment.date}} - {{appointment.time}} - <p v-if="appointment.client">{{appointment.client}}</p>
         <button @click="deleteAppointment(appointment._id)">Supprimer</button>
       </li>
     </ul>

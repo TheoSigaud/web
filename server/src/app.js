@@ -145,7 +145,7 @@ app.post("/createAppointement", async (req, res) => {
 });
 
 app.get('/getAppointements', (req, res) => {
-  Appointement.find({}, 'date time', function (error, appointements) {
+  Appointement.find({}, 'date time client', function (error, appointements) {
     if (error) {
       console.error(error);
     }
@@ -153,6 +153,7 @@ app.get('/getAppointements', (req, res) => {
     let newAppointements = appointements.map((appointement) => {
         return {
             _id: appointement._id,
+            client: appointement.client,
             date: appointement.date.toISOString().slice(0, 10),
             time: appointement.time.toISOString().slice(11, 16)
         }
@@ -227,8 +228,8 @@ app.get('/getChatAppointements', (req, res) => {
 
 app.post('/updateAppointement', (req, res) => {
   const {id, client} = req.body;
-
-  Appointement.findOne({id}, function (err, appointement) {
+  console.log(id, client)
+  Appointement.findOne({_id: id}, function (err, appointement) {
     appointement.client = client;
 
     appointement.save(function (err) {

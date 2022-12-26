@@ -14,14 +14,14 @@
         {{ button.label }}
       </button>
     </p>
-    <ul v-for="appointment in appointments" :key="appointment._id">
+    <ul v-for="appointment in appointments" :key="appointment._id" v-if="!showRestart">
       <li>{{appointment.date}} - {{appointment.time}}
         <button @click="updateAppointment(appointment._id)" class="btn btn-primary">Accepter le rendez-vous</button>
       </li>
     </ul>
     <p v-if="errorAppointment">{{errorAppointment}}</p>
 
-    <button class="btn btn-warning m-2" @click="reset" v-if="currentNode.restart">Restart</button>
+    <button class="btn btn-warning m-2" @click="reset" v-if="currentNode.restart || showRestart">Restart</button>
   </div>
 </template>
 
@@ -42,6 +42,7 @@
         appointments: [],
         errorAppointment: null,
         user: null,
+        showRestart: false,
       };
     },
     created() {
@@ -58,7 +59,6 @@
       }).then((res) => {
         this.user = res.data
       })
-      console.log(this.user)
     },
 
     methods: {
@@ -93,6 +93,9 @@
 
       reset() {
         this.currentNode = this.decisionTree['1'];
+        this.showRestart = false;
+        this.errorAppointment = null;
+        this.appointments = [];
       },
 
       async fetchChatAppointements() {
@@ -105,15 +108,16 @@
       },
 
       async updateAppointment(id) {
-        const response = await AppointementService.updateAppointment({
-          id,
-          client:
+        const response = await AppointementService.updateChatAppointment({
+          id: id,
+          client: this.user.user.email
         })
         if (response.status === 200) {
           this.errorAppointment = 'Rendez-vous accepté'
         } else {
           this.errorAppointment = 'Erreur lors de la mise à jour du rendez-vous'
         }
+        this.showRestart = true
       }
     }
   };
