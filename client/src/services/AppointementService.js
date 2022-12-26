@@ -9,6 +9,10 @@ export default {
     return Api().get('getAppointements')
   },
 
+  fetchChatAppointements() {
+    return Api().get('getChatAppointements')
+  },
+
   deleteAppointement(params) {
     return Api().post('deleteAppointement', params)
   }

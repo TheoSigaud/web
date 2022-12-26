@@ -176,4 +176,51 @@ app.post('/deleteAppointement', (req, res) => {
   })
 });
 
+app.get('/getChatAppointements', (req, res) => {
+
+  let currentDate = new Date();
+  let startOfWeek = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - currentDate.getDay() + 1);
+  let endOfWeek = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - currentDate.getDay() + 7);
+
+  Appointement.find({
+    date: { $gte: startOfWeek, $lte: endOfWeek }
+  }).then(appointements => {
+    if (appointements) {
+      let newAppointements = appointements.map((appointement) => {
+        return {
+          _id: appointement._id,
+          date: appointement.date.toISOString().slice(0, 10),
+          time: appointement.time.toISOString().slice(11, 16)
+        }
+      });
+
+      res.status(200).send({
+        appointments: newAppointements
+      })
+    } else {
+      let startOfNextWeek = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - currentDate.getDay() + 8);
+      let endOfNextWeek = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - currentDate.getDay() + 14);
+      Appointement.find({
+        date: { $gte: startOfNextWeek, $lte: endOfNextWeek }
+      }).then(appointements => {
+        if (appointements) {
+          let newAppointements = appointements.map((appointement) => {
+            return {
+              _id: appointement._id,
+              date: appointement.date.toISOString().slice(0, 10),
+              time: appointement.time.toISOString().slice(11, 16)
+            }
+          });
+
+          res.status(200).send({
+            appointments: newAppointements
+          })
+        } else {
+          res.status(204).send()
+        }
+      });
+    }
+  });
+});
+
 app.listen(process.env.PORT || 8081)

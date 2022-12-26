@@ -42,8 +42,10 @@ export default {
       await AppointementService.createAppointement({
         date: this.newAppointment.date,
         time: this.newAppointment.time,
-      }).then(() => {
+      }).then(async () => {
         this.success = 'Création réussie'
+        const response = await AppointementService.fetchAppointements()
+        this.appointments = response.data.appointments
       })
     },
 

@@ -14,6 +14,11 @@
         {{ button.label }}
       </button>
     </p>
+    <ul v-for="appointment in appointments" :key="appointment._id">
+      <li>{{appointment.date}} - {{appointment.time}}
+      </li>
+    </ul>
+    <p v-if="errorAppointment">{{errorAppointment}}</p>
 
     <button class="btn btn-warning m-2" @click="reset" v-if="currentNode.restart">Restart</button>
   </div>
@@ -21,6 +26,7 @@
 
 <script>
   import chatData from '../chatbot.json';
+  import AppointementService from '@/services/AppointementService'
 
   export default {
     name: 'Chatbot',
@@ -31,6 +37,8 @@
         decisionTree: null,
         dateAppointment: '',
         kmAppointment: 0,
+        appointments: [],
+        errorAppointment: null,
       };
     },
     created() {
@@ -44,25 +52,30 @@
     },
 
     methods: {
-      navigate(nodeId) {
+      async navigate(nodeId) {
         this.currentNode = this.decisionTree[nodeId];
+        if (nodeId == 8) {
+          await this.fetchChatAppointements()
+        }
       },
 
-      checkAppointement() {
+      async checkAppointement() {
         let date = new Date(this.dateAppointment);
         let diff = Date.now() - date.getTime();
         let diffYears = diff / (1000 * 60 * 60 * 24 * 365);
 
         if (diffYears >= 1) {
           this.currentNode = this.decisionTree[8];
+          await this.fetchChatAppointements()
         } else {
           this.currentNode = this.decisionTree[9];
         }
       },
 
-      checkKm() {
+      async checkKm() {
         if (this.kmAppointment >= 10000) {
           this.currentNode = this.decisionTree[8];
+          await this.fetchChatAppointements()
         } else {
           this.currentNode = this.decisionTree[10];
         }
@@ -70,6 +83,15 @@
 
       reset() {
         this.currentNode = this.decisionTree['1'];
+      },
+
+      async fetchChatAppointements() {
+        const response = await AppointementService.fetchChatAppointements()
+        if (response.status === 200 && response.data.appointments.length > 0) {
+          this.appointments = response.data.appointments
+        } else {
+          this.errorAppointment = 'Aucun rendez-vous trouvé dans les 2 prochaines semaines'
+        }
       }
     }
   };
