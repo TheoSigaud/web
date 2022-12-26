@@ -16,6 +16,7 @@
     </p>
     <ul v-for="appointment in appointments" :key="appointment._id">
       <li>{{appointment.date}} - {{appointment.time}}
+        <button @click="updateAppointment(appointment._id)" class="btn btn-primary">Accepter le rendez-vous</button>
       </li>
     </ul>
     <p v-if="errorAppointment">{{errorAppointment}}</p>
@@ -27,6 +28,7 @@
 <script>
   import chatData from '../chatbot.json';
   import AppointementService from '@/services/AppointementService'
+  import MiddlewareService from '@/services/MiddlewareService'
 
   export default {
     name: 'Chatbot',
@@ -39,6 +41,7 @@
         kmAppointment: 0,
         appointments: [],
         errorAppointment: null,
+        user: null,
       };
     },
     created() {
@@ -47,8 +50,15 @@
       this.currentNode = this.decisionTree;
     },
 
-    mounted() {
+    async mounted() {
       this.currentNode = this.decisionTree['1'];
+
+      await MiddlewareService.auth({
+        token: localStorage.getItem("tokenWeb")
+      }).then((res) => {
+        this.user = res.data
+      })
+      console.log(this.user)
     },
 
     methods: {
@@ -91,6 +101,18 @@
           this.appointments = response.data.appointments
         } else {
           this.errorAppointment = 'Aucun rendez-vous trouvé dans les 2 prochaines semaines'
+        }
+      },
+
+      async updateAppointment(id) {
+        const response = await AppointementService.updateAppointment({
+          id,
+          client:
+        })
+        if (response.status === 200) {
+          this.errorAppointment = 'Rendez-vous accepté'
+        } else {
+          this.errorAppointment = 'Erreur lors de la mise à jour du rendez-vous'
         }
       }
     }

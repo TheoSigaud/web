@@ -183,7 +183,8 @@ app.get('/getChatAppointements', (req, res) => {
   let endOfWeek = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - currentDate.getDay() + 7);
 
   Appointement.find({
-    date: { $gte: startOfWeek, $lte: endOfWeek }
+    date: { $gte: startOfWeek, $lte: endOfWeek },
+    client: { $eq: null }
   }).then(appointements => {
     if (appointements) {
       let newAppointements = appointements.map((appointement) => {
@@ -201,7 +202,8 @@ app.get('/getChatAppointements', (req, res) => {
       let startOfNextWeek = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - currentDate.getDay() + 8);
       let endOfNextWeek = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - currentDate.getDay() + 14);
       Appointement.find({
-        date: { $gte: startOfNextWeek, $lte: endOfNextWeek }
+        date: { $gte: startOfNextWeek, $lte: endOfNextWeek },
+        client: { $eq: null }
       }).then(appointements => {
         if (appointements) {
           let newAppointements = appointements.map((appointement) => {
@@ -220,6 +222,22 @@ app.get('/getChatAppointements', (req, res) => {
         }
       });
     }
+  });
+});
+
+app.post('/updateAppointement', (req, res) => {
+  const {id, client} = req.body;
+
+  Appointement.findOne({id}, function (err, appointement) {
+    appointement.client = client;
+
+    appointement.save(function (err) {
+      if (err)
+        res.send(err)
+      res.send({
+        success: true
+      })
+    });
   });
 });
 
