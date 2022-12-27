@@ -42,6 +42,25 @@ module.exports = function (io, app) {
       socket.emit('usersRoomChat', usersRoom);
       socket.to(data.room).emit('usersRoomChat', usersRoom);
     });
+
+    //GET LIST USERS
+    socket.on('getUsers', function(data){
+
+      if(io.sockets.adapter.rooms.get(data.room) === undefined){
+        socket.emit('sendLengthUsers', {
+            length: 0,
+            room: data.room,
+            max: data.max
+        });
+      }else {
+        const usersRoom = [...io.sockets.adapter.rooms.get(data.room)];
+        socket.emit('sendLengthUsers', {
+            length: usersRoom.length,
+            room: data.room,
+            max: data.max
+        });
+      }
+    });
   
     socket.on('disconnect', function(){
       console.log('User is now disconnected');

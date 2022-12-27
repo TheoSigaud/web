@@ -20,12 +20,6 @@
     name: "RoomChat",
     components: {ChatRoom},
 
-
-    watch: {
-      user: function (val) {
-        console.log(val)
-      }
-    },
     data () {
       return {
         nameRoom: this.$route.params.name,

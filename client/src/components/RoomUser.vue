@@ -2,14 +2,13 @@
   <div>
     <div class="container vh-100">
       <h3>Liste des salons</h3>
+      <p v-if="errorRoom">{{errorRoom}}</p>
       <div v-if="rooms.length > 0" class="container">
         <div class="row d-flex justify-content-start">
           <div class="d-flex flex-row card m-3 w-auto align-items-center" v-bind:key="room.name" v-for="room in rooms">
             <p class="m-0 p-2">{{room.name}}</p>
             <p class="m-0 p-2">{{room.max}} / personnes max</p>
-            <router-link class="btn btn-success m-2" v-bind:to="{ name: 'RoomChat', params: { name: room.name } }">
-              Rejoindre
-            </router-link>
+            <button class="btn btn-success m-2" @click="joinRoom(room)">Rejoindre</button>
           </div>
         </div>
       </div>
@@ -30,14 +29,28 @@
 
     data () {
       return {
-        rooms: []
+        rooms: [],
+        errorRoom: null
       }
     },
 
     created() {
       this.$socket.on('usersRoomChat', message => {
         this.users = message
-        console.log(this.users)
+      })
+
+      this.$socket.on('sendLengthUsers', message => {
+        console.log(message.length)
+        if (message.length >= message.max) {
+          this.errorRoom = 'Le salon est complet'
+        }else {
+          this.$router.push({
+            name: 'RoomChat',
+            params: {
+              name: message.room,
+            }
+          })
+        }
       })
     },
 
@@ -49,6 +62,13 @@
       async getRooms () {
         const response = await ActionsService.getRooms()
         this.rooms = response.data.rooms
+      },
+
+      async joinRoom (room) {
+        this.$socket.emit('getUsers', {
+          room: room.name,
+          max: room.max,
+        })
       }
     },
   }
