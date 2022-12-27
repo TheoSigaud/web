@@ -35,7 +35,9 @@ module.exports = function (io, app) {
   
     socket.on('disconnect', function(){
       console.log('User is now disconnected');
-      onlineUsers--;
+      if (onlineUsers > 0){
+        onlineUsers--;
+      } 
       io.emit('updateOnlineUsers', onlineUsers);
     });
   });
