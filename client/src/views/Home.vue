@@ -7,6 +7,7 @@
         <p v-if="showChat">Vous êtes en communication avec un administrateur</p>
         <Chat :email="user.user.email" v-if="showChat"/>
 
+        <Chatbot />
         <RoomUser />
       </div>
     </div>
@@ -16,10 +17,12 @@
   import MiddlewareService from '@/services/MiddlewareService'
   import Chat from "../components/Chat";
   import RoomUser from "../components/RoomUser";
+  import Chatbot from '@/components/Chatbot.vue';
 
   export default {
     name: "Home",
-    components: {Chat, RoomUser},
+    components: {Chat, Chatbot, RoomUser},
+
     data () {
       return {
         user: null,

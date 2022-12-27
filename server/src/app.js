@@ -6,6 +6,12 @@ const jwt = require("jsonwebtoken")
 const bcrypt = require('bcrypt')
 const auth = require("./middleware/auth");
 require("dotenv").config();
+
+
+let User = require("../models/users");
+let Appointement = require("../models/appointement");
+let Room = require("../models/rooms");
+
 const app = express()
 
 const server = app.listen(8081)
@@ -16,9 +22,6 @@ const io = require('socket.io')(server, {
     methods: ["GET", "POST"]
   }
 });
-
-let User = require("../models/users");
-let Room = require("../models/rooms");
 
 app.use(morgan('combined'))
 app.use(bodyParser.json())
@@ -189,6 +192,121 @@ app.post('/deleteRoom', (req, res) => {
   });
 });
 
+app.post("/createAppointement", async (req, res) => {
+  const date = new Date(req.body.date)
+  let time = req.body.time
+  const [hours, minutes] = time.split(':');
+  const newDate = new Date();
+  time = new Date(newDate.getFullYear(), newDate.getMonth(), newDate.getDate(), hours, minutes);
+
+  await Appointement.create({
+    date: date,
+    time: time
+  });
+
+  res.status(201).send({
+    message: 'User saved successfully!'
+  });
+});
+
+app.get('/getAppointements', (req, res) => {
+  Appointement.find({}, 'date time client', function (error, appointements) {
+    if (error) {
+      console.error(error);
+    }
+
+    let newAppointements = appointements.map((appointement) => {
+        return {
+            _id: appointement._id,
+            client: appointement.client,
+            date: appointement.date.toISOString().slice(0, 10),
+            time: appointement.time.toISOString().slice(11, 16)
+        }
+    });
+
+    res.send({
+      appointments: newAppointements
+    })
+  }).sort({_id: -1})
+});
+
+app.post('/deleteAppointement', (req, res) => {
+  Appointement.remove({
+    _id: req.body.id
+  }, function(err, post){
+    if (err)
+      res.send(err)
+    res.send({
+      success: true
+    })
+  })
+});
+
+app.get('/getChatAppointements', (req, res) => {
+
+  let currentDate = new Date();
+  let startOfWeek = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - currentDate.getDay() + 1);
+  let endOfWeek = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - currentDate.getDay() + 7);
+
+  Appointement.find({
+    date: { $gte: startOfWeek, $lte: endOfWeek },
+    client: { $eq: null }
+  }).then(appointements => {
+    if (appointements) {
+      let newAppointements = appointements.map((appointement) => {
+        return {
+          _id: appointement._id,
+          date: appointement.date.toISOString().slice(0, 10),
+          time: appointement.time.toISOString().slice(11, 16)
+        }
+      });
+
+      res.status(200).send({
+        appointments: newAppointements
+      })
+    } else {
+      let startOfNextWeek = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - currentDate.getDay() + 8);
+      let endOfNextWeek = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - currentDate.getDay() + 14);
+      Appointement.find({
+        date: { $gte: startOfNextWeek, $lte: endOfNextWeek },
+        client: { $eq: null }
+      }).then(appointements => {
+        if (appointements) {
+          let newAppointements = appointements.map((appointement) => {
+            return {
+              _id: appointement._id,
+              date: appointement.date.toISOString().slice(0, 10),
+              time: appointement.time.toISOString().slice(11, 16)
+            }
+          });
+
+          res.status(200).send({
+            appointments: newAppointements
+          })
+        } else {
+          res.status(204).send()
+        }
+      });
+    }
+  });
+});
+
+app.post('/updateAppointement', (req, res) => {
+  const {id, client} = req.body;
+  console.log(id, client)
+  Appointement.findOne({_id: id}, function (err, appointement) {
+    appointement.client = client;
+
+    appointement.save(function (err) {
+      if (err)
+        res.send(err)
+      res.send({
+        success: true
+      })
+    });
+  });
+});
+
 app.post('/updateRoom', (req, res) => {
   const {name, max} = req.body;
 
@@ -204,6 +322,5 @@ app.post('/updateRoom', (req, res) => {
     })
   });
 });
-
 
 require("./socket")(io, app);

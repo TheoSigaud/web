@@ -1,0 +1,93 @@
+{
+  "1": {
+    "question": "Quel type d'aide voulez-vous ?",
+    "buttons": [
+      {
+        "label": "Vérifier l'entretien de votre véhicule",
+        "nextNode": "2"
+      },
+      {
+        "label": "Souhaitez-vous des informations sur les véhicules ?",
+        "nextNode": "3"
+      },
+      {
+        "label": "Voulez-vous des informations de contact ?",
+        "nextNode": "4"
+      },
+      {
+        "label": "Aucune",
+        "nextNode": "5"
+      }
+    ]
+  },
+  "2": {
+    "question": "Quelle est la date du dernier entretien de votre moto ?",
+    "input": "date"
+  },
+  "3": {
+    "question": "Pour quel type d'usage ?",
+    "buttons": [
+      {
+        "label": "Un usage routier",
+        "nextNode": "2"
+      },
+      {
+        "label": "Un usage tout-terrain ?",
+        "nextNode": "3"
+      },
+      {
+        "label": "Un usage sportif ?",
+        "nextNode": "4"
+      }
+    ]
+  },
+  "4": {
+    "question": "Que cherchez-vous ?",
+    "buttons": [
+      {
+        "label": "Une adresse email",
+        "nextNode": "6"
+      },
+      {
+        "label": "Un numéro de téléphone",
+        "nextNode": "7"
+      }
+    ]
+  },
+  "5": {
+    "question": "D'accord, peut-être une autre fois. Au revoir !",
+    "buttons": [],
+    "restart": true
+  },
+  "6": {
+    "question": "admin@gmail.com",
+    "buttons": [],
+    "restart": true
+  },
+  "7": {
+    "question": "06 06 06 06 06",
+    "buttons": [],
+    "restart": true
+  },
+  "8": {
+    "question": "Voici les rendez-vous disponibles",
+    "buttons": []
+  },
+  "9": {
+    "question": "Quel est le nombre de kilomètre parcourus depuis le dernier entretien ?",
+    "input": "km"
+  },
+  "10": {
+    "question": "Souhaitez-vous prendre un rendez-vous pour votre entretien ?",
+    "buttons": [
+      {
+        "label": "Oui",
+        "nextNode": "8"
+      },
+      {
+        "label": "Non",
+        "nextNode": "5"
+      }
+    ]
+  }
+}
