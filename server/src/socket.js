@@ -29,17 +29,18 @@ module.exports = function (io, app) {
       socket.to(data).emit('requestAccepted', '');
     });
 
-    //SEND MSG HELP
+    //SEND MSG
     socket.on('message', message => {
-      io.to(message.email).emit('message', message)
+      console.log(message);
+      io.to(message.room).emit('message', message)
     });
 
     //JOIN CHAT ROOM
     socket.on('joinRoomChat', function(data){
-      socket.join(data);
-      const usersRoom = [...io.sockets.adapter.rooms.get(data)];
+      socket.join(data.room);
+      const usersRoom = [...io.sockets.adapter.rooms.get(data.room)];
       socket.emit('usersRoomChat', usersRoom);
-      socket.to(data).emit('usersRoomChat', usersRoom);
+      socket.to(data.room).emit('usersRoomChat', usersRoom);
     });
   
     socket.on('disconnect', function(){

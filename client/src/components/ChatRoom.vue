@@ -12,10 +12,10 @@
 
 <script>
 export default {
-  name: "Chat",
+  name: "ChatRoom",
 
   props: {
-    email: {
+    room: {
       type: String,
       required: true
     }
@@ -37,7 +37,7 @@ export default {
     sendMessage() {
       this.$socket.emit('message', {
         text: this.message,
-        room: this.email
+        room: this.room
       })
 
       this.message = ''
