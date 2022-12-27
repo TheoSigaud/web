@@ -26,7 +26,7 @@
       }
     },
 
-    mounted() {
+    created() {
       this.$socket.on('getMessages', message => {
         console.log(message)
         this.messages.push(message)
