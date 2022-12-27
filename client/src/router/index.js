@@ -5,6 +5,7 @@ import Home from '@/views/Home'
 import Dashboard from '@/views/admin/Dashboard'
 import Room from '@/views/admin/Room'
 import RoomChat from '@/views/RoomChat'
+import Appointement from '@/views/admin/Appointement'
 import MiddlewareService from '@/services/MiddlewareService'
 
 Vue.use(Router)
@@ -37,6 +38,11 @@ const router = new Router({
       name: 'RoomChat',
       path: '/room-chat/:name',
       component: RoomChat,
+    },
+    {
+      name: 'Appointement',
+      path: '/admin/appointement',
+      component: Appointement,
     }
   ]
 })
