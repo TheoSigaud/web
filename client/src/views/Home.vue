@@ -27,7 +27,6 @@
         showChat: false
       }
     },
-
     async mounted() {
       await MiddlewareService.auth({
         token: localStorage.getItem("tokenWeb")
@@ -44,7 +43,9 @@
       async sendRequest() {
         this.$socket.emit('sendRequest', this.user)
         this.sendReq = true
-      }
-    }
+      },
+
+    },
+
   }
 </script>
