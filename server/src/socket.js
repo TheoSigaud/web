@@ -16,21 +16,30 @@ module.exports = function (io, app) {
       io.emit('updateOnlineUsers', onlineUsers);
     });
 
+
+    //REQUEST HELP
     socket.on('sendRequest', function(data){
-      console.log(data.user.email);
       socket.join(data.user.email);
       socket.broadcast.emit('request', data);
     });
 
+    //ADMIN ACCEPT HELP
     socket.on('joinRoom', function(data){
-      console.log(data);
       socket.join(data);
       socket.to(data).emit('requestAccepted', '');
     });
 
-    socket.on('sendMessage', (room, data) => {
-      console.log(room);
-      socket.to(room).emit('getMessages', data.text);
+    //SEND MSG HELP
+    socket.on('message', message => {
+      io.to(message.email).emit('message', message)
+    });
+
+    //JOIN CHAT ROOM
+    socket.on('joinRoomChat', function(data){
+      socket.join(data);
+      const usersRoom = [...io.sockets.adapter.rooms.get(data)];
+      socket.emit('usersRoomChat', usersRoom);
+      socket.to(data).emit('usersRoomChat', usersRoom);
     });
   
     socket.on('disconnect', function(){
@@ -51,5 +60,5 @@ module.exports = function (io, app) {
     
     res.send({ onlineUsers });
   });
-  
+
 }

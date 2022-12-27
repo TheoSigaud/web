@@ -6,6 +6,8 @@
         <p v-if="sendReq && !showChat">Une demande a été envoyé</p>
         <p v-if="showChat">Vous êtes en communication avec un administrateur</p>
         <Chat :email="user.user.email" v-if="showChat"/>
+
+        <RoomUser />
       </div>
     </div>
 </template>
@@ -13,10 +15,11 @@
 <script>
   import MiddlewareService from '@/services/MiddlewareService'
   import Chat from "../components/Chat";
+  import RoomUser from "../components/RoomUser";
 
   export default {
     name: "Home",
-    components: {Chat},
+    components: {Chat, RoomUser},
     data () {
       return {
         user: null,
