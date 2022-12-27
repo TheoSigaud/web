@@ -17,7 +17,6 @@
 </template>
 
 <script>
-  import io from 'socket.io-client';
   import ActionsService from '@/services/ActionsService'
   import MiddlewareService from '@/services/MiddlewareService'
   import Chat from "../../components/Chat";
@@ -27,29 +26,19 @@
     components: {Chat},
     data () {
       return {
-        socket : io('http://localhost:8081/'),
         users: [],
         currentRoom: null
       }
     },
 
     async mounted() {
-      // await MiddlewareService.auth({
-      //   token: localStorage.getItem("tokenWeb")
-      // }).then((res) => {
-      //   this.user = res.data
-      // })
 
       await this.checkRequests()
     },
 
     methods: {
-      async online() {
-
-      },
-
       async checkRequests() {
-        this.socket.on('request', data => {
+        this.$socket.on('request', data => {
           if (!this.users.includes(data.user.email)) {
             this.users.push(data.user.email);
           }
@@ -57,8 +46,8 @@
       },
 
       async join(user) {
+        this.$socket.emit('joinRoom', user)
         this.currentRoom = user
-        this.socket.emit('joinRoom', user)
       },
 
       async reject(index) {
