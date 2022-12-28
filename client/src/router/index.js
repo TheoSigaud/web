@@ -6,6 +6,7 @@ import Dashboard from '@/views/admin/Dashboard'
 import Room from '@/views/admin/Room'
 import RoomChat from '@/views/RoomChat'
 import Appointement from '@/views/admin/Appointement'
+import PageNotFound from '@/views/PageNotFound'
 import MiddlewareService from '@/services/MiddlewareService'
 
 Vue.use(Router)
@@ -43,7 +44,11 @@ const router = new Router({
       name: 'Appointement',
       path: '/admin/appointement',
       component: Appointement,
-    }
+    },
+    {
+      name: 'PageNotFound',
+      path: '*',
+      component: PageNotFound },
   ]
 })
 
