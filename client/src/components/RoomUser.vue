@@ -60,7 +60,11 @@
 
     methods: {
       async getRooms () {
-        const response = await ActionsService.getRooms()
+        const response = await ActionsService.getRooms(
+          {
+            token: localStorage.getItem("tokenWeb")
+          }
+        )
         this.rooms = response.data.rooms
       },
 
