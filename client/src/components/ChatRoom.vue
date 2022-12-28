@@ -8,13 +8,13 @@
       <div class="row" v-for="message in messages" :key="message.id">
         <div class="col-sm-6" v-if="message.email !== email">
           <div class="chat-bubble">
-            <h6 class="card-title">{{ message.email }}</h6>
+            <h6 class="card-title">{{ message.email }}: </h6>
             <p class="card-text">{{ message.text }}</p>
           </div>
         </div>
         <div class="col-sm-6 offset-sm-6" v-else>
           <div class="chat-bubble mine">
-            <h6 class="card-title">{{ message.email }}</h6>
+            <h6 class="card-title">Moi: </h6>
             <p class="card-text">{{ message.text }}</p>
           </div>
         </div>
@@ -74,7 +74,6 @@ export default {
   display: inline-block;
   margin: 10px;
   padding: 15px;
-  max-width: 60%;
   position: relative;
 }
 
