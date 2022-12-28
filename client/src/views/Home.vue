@@ -17,7 +17,7 @@
   import MiddlewareService from '@/services/MiddlewareService'
   import Chat from "../components/Chat";
   import RoomUser from "../components/RoomUser";
-  import Chatbot from '@/components/Chatbot.vue';
+  import Chatbot from '../components/Chatbot.vue';
 
   export default {
     name: "Home",
