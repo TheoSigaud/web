@@ -1,27 +1,40 @@
 <template>
-  <div>
-    <h3>{{ currentNode.question }}</h3>
-    <div v-if="currentNode.input === 'date'">
-      <input type="date" class="form-control" v-model="dateAppointment" />
-      <button class="btn btn-primary" @click="checkAppointement">Suivant</button>
-    </div>
-    <div v-if="currentNode.input === 'km'">
-      <input type="number" class="form-control" v-model="kmAppointment" />
-      <button class="btn btn-primary" @click="checkKm">Suivant</button>
-    </div>
-    <p v-else>
-      <button v-for="(button, index) in currentNode.buttons" :key="index" @click="navigate(button.nextNode)" class="btn btn-primary m-2">
-        {{ button.label }}
-      </button>
-    </p>
-    <ul v-for="appointment in appointments" :key="appointment._id" v-if="!showRestart">
-      <li>{{appointment.date}} - {{appointment.time}}
-        <button @click="updateAppointment(appointment._id)" class="btn btn-primary">Accepter le rendez-vous</button>
-      </li>
-    </ul>
-    <p v-if="errorAppointment">{{errorAppointment}}</p>
+  <div class="container">
+    <div>
+      <div class="collapse chatbot mb-5 me-2" id="collapseExample">
+        <div class="card card-body" style="max-width: 400px;">
+          <div>
+            <h5>{{ currentNode.question }}</h5>
+            <div v-if="currentNode.input === 'date'">
+              <input type="date" class="form-control" v-model="dateAppointment" />
+              <button class="btn btn-primary" @click="checkAppointement">Suivant</button>
+            </div>
+            <div v-if="currentNode.input === 'km'">
+              <input type="number" class="form-control" v-model="kmAppointment" />
+              <button class="btn btn-primary" @click="checkKm">Suivant</button>
+            </div>
+            <p v-else>
+              <button v-for="(button, index) in currentNode.buttons" :key="index" @click="navigate(button.nextNode)" class="btn btn-primary m-2">
+                {{ button.label }}
+              </button>
+            </p>
+            <ul v-for="appointment in appointments" :key="appointment._id" v-if="!showRestart">
+              <li>{{appointment.date}} - {{appointment.time}}
+                <button @click="updateAppointment(appointment._id)" class="btn btn-primary">Accepter le rendez-vous</button>
+              </li>
+            </ul>
+            <p v-if="errorAppointment">{{errorAppointment}}</p>
 
-    <button class="btn btn-warning m-2" @click="reset" v-if="currentNode.restart || showRestart">Restart</button>
+            <button class="btn btn-warning m-2" @click="reset" v-if="currentNode.restart || showRestart">Restart</button>
+          </div>
+        </div>
+      </div>
+      <p>
+        <button class="btn btn-primary me-2 mb-2 chatbot" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+          Ouvrir le chatbot
+        </button>
+      </p>
+    </div>
   </div>
 </template>
 
@@ -103,6 +116,7 @@
         if (response.status === 200 && response.data.appointments.length > 0) {
           this.appointments = response.data.appointments
         } else {
+          this.showRestart = true;
           this.errorAppointment = 'Aucun rendez-vous trouvé dans les 2 prochaines semaines'
         }
       },
@@ -122,3 +136,12 @@
     }
   };
 </script>
+
+
+<style>
+.chatbot {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+</style>

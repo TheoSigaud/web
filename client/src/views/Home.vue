@@ -1,12 +1,12 @@
 <template>
     <div>
-      <div class="container vh-100">
+      <div class="container">
         <h1>YOOOO</h1>
         <button v-if="!sendReq" class="btn btn-primary" @click="sendRequest">Aide</button>
         <p v-if="sendReq && !showChat">Une demande a été envoyé</p>
         <p v-if="showChat">Vous êtes en communication avec un administrateur</p>
-        <Chat :email="user.user.email" v-if="showChat"/>
 
+        <Chat :email="user.user.email" v-if="showChat"/>
         <Chatbot />
         <RoomUser />
       </div>

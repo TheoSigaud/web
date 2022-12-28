@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="container vh-100">
+    <div class="container">
       <h3>Liste des salons</h3>
       <p v-if="errorRoom">{{errorRoom}}</p>
       <div v-if="rooms.length > 0" class="container">
