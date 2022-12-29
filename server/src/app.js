@@ -166,7 +166,7 @@ app.post('/createRoom', async (req, res) => {
   }
 });
 
-app.get('/getRooms', (req, res) => {
+app.post('/getRooms', auth, (req, res) => {
   Room.find({}, 'name max', function (error, rooms) {
     if (error) {
       console.error(error);

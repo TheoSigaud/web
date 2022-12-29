@@ -3,11 +3,12 @@
       <div class="container vh-100">
         <h3>Bienvenue sur le salon : {{nameRoom}}</h3>
 
-        <ul>
-          <li v-for="user in users" :key="user">{{ user }}</li>
+        <ul class="list-group list-group-flush">
+          <li v-for="user in users" :key="user" class="list-group-item d-flex align-items-center">
+            <span class="badge rounded-pill text-bg-success">&nbsp;</span>&nbsp;{{ user }}</li>
         </ul>
 
-        <ChatRoom :room="nameRoom"/>
+        <ChatRoom v-if="user" :room="nameRoom" :email="user.user.email"/>
       </div>
     </div>
 </template>
@@ -36,7 +37,8 @@
       })
 
       this.$socket.emit('joinRoomChat', {
-        room: this.nameRoom
+        room: this.nameRoom,
+        email: this.user.user.email
       });
 
       this.$socket.on('usersRoomChat', users => {

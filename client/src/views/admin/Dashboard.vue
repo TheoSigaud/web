@@ -12,7 +12,7 @@
               <button class="btn btn-danger" @click="reject(index)">Refuser</button>
             </div>
 
-            <Chat v-if="currentRoom" :email="currentRoom"/>
+            <Chat v-if="currentRoom" :room="currentRoom" :email="user.user.email"/>
         </div>
     </div>
 </template>
@@ -30,16 +30,17 @@
         users: [],
         currentRoom: null,
         onlineStatus: 'Offline',
-        onlineUsers: 0
+        onlineUsers: 0,
+        user: null
       }
     },
 
     async mounted() {
-      // await MiddlewareService.auth({
-      //   token: localStorage.getItem("tokenWeb")
-      // }).then((res) => {
-      //   this.user = res.data
-      // })
+      await MiddlewareService.auth({
+        token: localStorage.getItem("tokenWeb")
+      }).then((res) => {
+        this.user = res.data
+      })
 
       await this.checkRequests()
     },

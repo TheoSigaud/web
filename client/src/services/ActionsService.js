@@ -10,7 +10,7 @@ export default {
   },
 
   getRooms (params) {
-    return Api().get('/getRooms')
+    return Api().post('getRooms', params)
   },
 
   deleteRoom (params) {

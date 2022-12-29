@@ -8,13 +8,14 @@ const verifyToken = (req, res, next) => {
 
     if (!token) {
         return res.status(403).send("A token is required for authentication");
+    }else {
+        try {
+            req.user = jwt.verify(token, config.TOKEN_KEY);
+        } catch (err) {
+            return res.status(401).send("Invalid Token");
+        }
+        return next();
     }
-    try {
-        req.user = jwt.verify(token, config.TOKEN_KEY);
-    } catch (err) {
-        return res.status(401).send("Invalid Token");
-    }
-    return next();
 };
 
 module.exports = verifyToken;

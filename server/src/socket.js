@@ -31,16 +31,25 @@ module.exports = function (io, app) {
 
     //SEND MSG
     socket.on('message', message => {
-      console.log(message);
       io.to(message.room).emit('message', message)
     });
 
     //JOIN CHAT ROOM
     socket.on('joinRoomChat', function(data){
+      socket.email = data.email;
       socket.join(data.room);
       const usersRoom = [...io.sockets.adapter.rooms.get(data.room)];
-      socket.emit('usersRoomChat', usersRoom);
-      socket.to(data.room).emit('usersRoomChat', usersRoom);
+      let usersEmail = [];
+      for (const user of usersRoom) {
+        const socket = io.sockets.sockets.get(user);
+        if (socket) {
+          const email = socket.email;
+          usersEmail.push(email);
+        }
+      }
+
+      socket.emit('usersRoomChat', usersEmail);
+      socket.to(data.room).emit('usersRoomChat', usersEmail);
     });
 
     //GET LIST USERS

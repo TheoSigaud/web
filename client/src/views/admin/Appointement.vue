@@ -1,18 +1,38 @@
 <template>
-  <div>
-    <h1>Liste des rendez-vous</h1>
-    <ul v-for="appointment in appointments" :key="appointment._id">
-      <li>{{appointment.date}} - {{appointment.time}} - <p v-if="appointment.client">{{appointment.client}}</p>
-        <button @click="deleteAppointment(appointment._id)">Supprimer</button>
-      </li>
-    </ul>
-    <h2>Créer un rendez-vous</h2>
+  <div class="container">
+    <h1 class="mb-4">Liste des rendez-vous</h1>
+
+    <table class="table">
+      <thead>
+      <tr>
+        <th scope="col">Date</th>
+        <th scope="col">Heure</th>
+        <th scope="col">Disponible</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr v-for="appointment in appointments" :key="appointment._id">
+        <td>{{appointment.date}}</td>
+        <td>{{appointment.time}}</td>
+        <td v-if="!appointment.client">Oui</td>
+        <td v-else>Réservé par - {{appointment.client}}</td>
+      </tr>
+      </tbody>
+    </table>
+
+    <h4 class="my-5">Créer un rendez-vous</h4>
     <form @submit.prevent="createAppointment">
-      <label for="date">Date:</label>
-      <input type="date" v-model="newAppointment.date" id="date">
-      <label for="time">Heure:</label>
-      <input type="time" v-model="newAppointment.time" id="time">
-      <button type="submit">Créer rendez-vous</button>
+      <div class="row d-flex justify-content-center">
+        <div class="col-sm-4">
+          <label for="date">Date:</label>
+          <input type="date" v-model="newAppointment.date" id="date" class="form-control">
+        </div>
+        <div class="col-sm-4">
+          <label for="time">Heure:</label>
+          <input type="time" v-model="newAppointment.time" id="time" class="form-control">
+        </div>
+      </div>
+      <button class="btn btn-primary mt-3" type="submit">Créer rendez-vous</button>
     </form>
   </div>
 </template>

@@ -47,6 +47,7 @@
 
 <script>
   import UsersService from '@/services/UsersService'
+  import MiddlewareService from '@/services/MiddlewareService'
 
   export default {
     name: "Hello",
@@ -64,9 +65,17 @@
       }
     },
 
+    async mounted() {
+      // await MiddlewareService.auth({
+      //   token: localStorage.getItem("tokenWeb")
+      // }).then((res) => {
+      //   console.log(res)
+      // })
+    },
+
     methods: {
       async register() {
-        const response = await UsersService.register({
+        await UsersService.register({
           email: this.emailRegister,
           password: this.passwordRegister,
         }).then(() => {
@@ -75,7 +84,7 @@
       },
 
       async signInWithEmail() {
-        const response = await UsersService.login({
+        await UsersService.login({
           email: this.emailLogin,
           password: this.passwordLogin,
         }).then((res) => {
