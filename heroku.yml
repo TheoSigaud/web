@@ -1,0 +1,14 @@
+build:
+  compose:
+    web: docker-compose.yml
+
+release:
+  image: web
+
+ports:
+  web: 80
+
+resources:
+  web:
+    memory: 1G
+    processes: 2
