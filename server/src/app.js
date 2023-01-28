@@ -56,13 +56,13 @@ app.post('/register', async (req, res) => {
     const {email, password} = req.body;
 
     if (!(email && password)) {
-      res.status(400).send("All input is required");
+      return res.status(200).send("Tous les champs sont requis");
     }
 
     const oldUser = await User.findOne({email});
 
     if (oldUser) {
-      return res.status(409).send("User Already Exist. Please Login");
+      return res.status(200).send("Cet utilisateur existe déjà");
     }
 
     const encryptedPassword = await bcrypt.hash(password, 10);
@@ -74,7 +74,7 @@ app.post('/register', async (req, res) => {
     });
 
     res.status(201).send({
-      message: 'User saved successfully!'
+      message: 'Utilisateur créé'
     });
   } catch (err) {
     console.log(err);

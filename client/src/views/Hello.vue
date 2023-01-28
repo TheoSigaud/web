@@ -13,7 +13,7 @@
 
                           <div class="d-flex align-items-center justify-content-between">
                               <button class="btn btn-primary" @click="signInWithEmail" type="submit">Connexion</button>
-                              <p class="m-0" @click="show = !show">Inscription</p>
+                              <p class="m-0" @click="show = !show; success = ''">Inscription</p>
                           </div>
                         </form>
                     </div>
@@ -78,8 +78,13 @@
         await UsersService.register({
           email: this.emailRegister,
           password: this.passwordRegister,
-        }).then(() => {
-          this.success = 'Inscription réussie'
+        }).then((res) => {
+          if (res.status === 201) {
+            this.success = 'Inscription réussie'
+          } else {
+            console.log(res)
+            this.success = res.data
+          }
         })
       },
 
