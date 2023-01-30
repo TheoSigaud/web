@@ -49,7 +49,7 @@ db.once("open", function(callback){
   console.log("Connection Succeeded");
 });
 
-const testUser = User.findOne({email:"user@gmail.com"}).then(user => {
+User.findOne({email:"user@gmail.com"}).then(user => {
   if(!user) {
     User.create({
       email: 'user@gmail.com',
@@ -59,7 +59,17 @@ const testUser = User.findOne({email:"user@gmail.com"}).then(user => {
   }
 });
 
-const testAdmin = User.findOne({email:"admin@gmail.com"}).then(user => {
+User.findOne({email:"toto@gmail.com"}).then(user => {
+  if(!user) {
+    User.create({
+      email: 'toto@gmail.com',
+      password: '$2b$10$3Olkmbxmxz3zDd4TCqW7UuMwe/gvTVdPcHrn5Bn3eaKPh4mFXPzES',
+      role: 0
+    });
+  }
+});
+
+User.findOne({email:"admin@gmail.com"}).then(user => {
   if(!user){
     User.create({
       email: 'admin@gmail.com',
@@ -69,6 +79,39 @@ const testAdmin = User.findOne({email:"admin@gmail.com"}).then(user => {
   }
 });
 
+Appointement.create({
+  date: new Date(2023, 5, 2),
+  time: new Date(2023, 5, 2, 23, 0, 0)
+});
+
+Appointement.create({
+  date: new Date(2023, 5, 12),
+  time: new Date(2023, 5, 12, 23, 0, 0)
+});
+
+Appointement.create({
+  date: new Date(2023, 5, 20),
+  time: new Date(2023, 5, 20, 23, 0, 0)
+});
+
+
+Room.findOne({name:"Room 1"}).then(room => {
+  if (!room) {
+    Room.create({
+      name: 'Room 1',
+      max: 10
+    });
+  }
+})
+
+Room.findOne({name:"Room 2"}).then(room => {
+  if(!room) {
+    Room.create({
+      name: 'Room 2',
+      max: 5
+    });
+  }
+})
 app.post('/register', async (req, res) => {
 
   try {
