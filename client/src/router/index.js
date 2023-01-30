@@ -70,10 +70,16 @@ const router = new Router({
       ]
     },
     {
-      name: 'Appointement',
       path: '/admin/appointement',
       component: Appointement,
-      meta: {requiresAuthAdmin: true}
+      meta: {requiresAuthAdmin: true},
+      children: [
+        {
+          path: '',
+          name: 'Appointement',
+          component: NavbarAdmin
+        }
+      ]
     },
     {
       name: 'PageNotFound',

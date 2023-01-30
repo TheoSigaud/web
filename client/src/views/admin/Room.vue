@@ -97,6 +97,7 @@
         await ActionsService.createRoom({
           name: this.name,
           max: this.max,
+          token: localStorage.getItem("tokenWeb"),
         }).then(() => {
           this.success = 'Création réussie'
           this.name = null
@@ -106,13 +107,16 @@
       },
 
       async getRooms () {
-        const response = await ActionsService.getRooms()
+        const response = await ActionsService.getRooms({
+          token: localStorage.getItem("tokenWeb"),
+        })
         this.rooms = response.data.rooms
       },
 
       async deleteRoom (name) {
         await ActionsService.deleteRoom({
-          name: name
+          name: name,
+          token: localStorage.getItem("tokenWeb"),
         }).then(() => {
           this.getRooms()
         })
@@ -121,7 +125,8 @@
       async update () {
         await ActionsService.updateRoom({
           name: this.nameUpdate,
-          max: this.maxUpdate
+          max: this.maxUpdate,
+          token: localStorage.getItem("tokenWeb"),
         }).then(() => {
           this.getRooms()
         })

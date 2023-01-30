@@ -12,6 +12,9 @@
           <li class="nav-item ms-4">
             <router-link to="/admin/room">Salons</router-link>
           </li>
+          <li class="nav-item ms-4">
+            <router-link to="/admin/appointement">Rendez-vous</router-link>
+          </li>
         </ul>
         <button class="btn btn-primary" @click="logout">Déconnexion</button>
       </div>

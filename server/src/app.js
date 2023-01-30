@@ -157,8 +157,7 @@ app.post("/online", async (req, res) => {
 
 });
 
-app.post('/createRoom', async (req, res) => {
-
+app.post('/createRoom', auth, async (req, res) => {
   try {
     const {name, max} = req.body;
 
@@ -197,7 +196,7 @@ app.post('/getRooms', auth, (req, res) => {
   }).sort({_id: -1})
 });
 
-app.post('/deleteRoom', (req, res) => {
+app.post('/deleteRoom', auth, (req, res) => {
   const {name} = req.body;
 
   Room.deleteOne({
@@ -211,7 +210,7 @@ app.post('/deleteRoom', (req, res) => {
   });
 });
 
-app.post("/createAppointement", async (req, res) => {
+app.post("/createAppointement", auth, async (req, res) => {
   const date = new Date(req.body.date)
   let time = req.body.time
   const [hours, minutes] = time.split(':');
@@ -228,7 +227,7 @@ app.post("/createAppointement", async (req, res) => {
   });
 });
 
-app.get('/getAppointements', (req, res) => {
+app.post('/getAppointements', auth, (req, res) => {
   Appointement.find({}, 'date time client', function (error, appointements) {
     if (error) {
       console.error(error);
@@ -249,7 +248,7 @@ app.get('/getAppointements', (req, res) => {
   }).sort({_id: -1})
 });
 
-app.post('/deleteAppointement', (req, res) => {
+app.post('/deleteAppointement', auth, (req, res) => {
   Appointement.remove({
     _id: req.body.id
   }, function(err, post){
@@ -310,7 +309,7 @@ app.get('/getChatAppointements', (req, res) => {
   });
 });
 
-app.post('/updateAppointement', (req, res) => {
+app.post('/updateAppointement', auth, (req, res) => {
   const {id, client} = req.body;
   console.log(id, client)
   Appointement.findOne({_id: id}, function (err, appointement) {
@@ -326,7 +325,7 @@ app.post('/updateAppointement', (req, res) => {
   });
 });
 
-app.post('/updateRoom', (req, res) => {
+app.post('/updateRoom', auth, (req, res) => {
   const {name, max} = req.body;
 
   Room.findOne({name}, function (err, room) {
