@@ -75,17 +75,21 @@
 
     methods: {
       async register() {
-        await UsersService.register({
-          email: this.emailRegister,
-          password: this.passwordRegister,
-        }).then((res) => {
-          if (res.status === 201) {
-            this.success = 'Inscription réussie'
-          } else {
-            console.log(res)
-            this.success = res.data
-          }
-        })
+        if(this.passwordRegister !== this.passwordConfirmRegister) {
+          this.success = 'Les mots de passe ne correspondent pas'
+        }else {
+          await UsersService.register({
+            email: this.emailRegister,
+            password: this.passwordRegister,
+          }).then((res) => {
+            if (res.status === 201) {
+              this.success = 'Inscription réussie'
+            } else {
+              console.log(res)
+              this.success = res.data
+            }
+          })
+        }
       },
 
       async signInWithEmail() {

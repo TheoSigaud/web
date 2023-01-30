@@ -49,6 +49,25 @@ db.once("open", function(callback){
   console.log("Connection Succeeded");
 });
 
+const testUser = User.findOne({email:"user@gmail.com"}).then(user => {
+  if(!user) {
+    User.create({
+      email: 'user@gmail.com',
+      password: '$2b$10$3Olkmbxmxz3zDd4TCqW7UuMwe/gvTVdPcHrn5Bn3eaKPh4mFXPzES',
+      role: 0
+    });
+  }
+});
+
+const testAdmin = User.findOne({email:"admin@gmail.com"}).then(user => {
+  if(!user){
+    User.create({
+      email: 'admin@gmail.com',
+      password: '$2b$10$3Olkmbxmxz3zDd4TCqW7UuMwe/gvTVdPcHrn5Bn3eaKPh4mFXPzES',
+      role: 1
+    });
+  }
+});
 
 app.post('/register', async (req, res) => {
 
