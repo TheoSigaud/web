@@ -260,7 +260,7 @@ app.post('/deleteAppointement', auth, (req, res) => {
   })
 });
 
-app.get('/getChatAppointements', (req, res) => {
+app.get('/getChatAppointements', auth, (req, res) => {
 
   let currentDate = new Date();
   let startOfWeek = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - currentDate.getDay() + 1);

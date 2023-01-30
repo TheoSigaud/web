@@ -78,7 +78,9 @@
       async navigate(nodeId) {
         this.currentNode = this.decisionTree[nodeId];
         if (nodeId == 8) {
-          await this.fetchChatAppointements()
+          await this.fetchChatAppointements({
+            token: localStorage.getItem("tokenWeb"),
+          })
         }
       },
 
@@ -89,7 +91,9 @@
 
         if (diffYears >= 1) {
           this.currentNode = this.decisionTree[8];
-          await this.fetchChatAppointements()
+          await this.fetchChatAppointements({
+            token: localStorage.getItem("tokenWeb"),
+          })
         } else {
           this.currentNode = this.decisionTree[9];
         }
@@ -98,7 +102,9 @@
       async checkKm() {
         if (this.kmAppointment >= 10000) {
           this.currentNode = this.decisionTree[8];
-          await this.fetchChatAppointements()
+          await this.fetchChatAppointements({
+            token: localStorage.getItem("tokenWeb"),
+          })
         } else {
           this.currentNode = this.decisionTree[10];
         }
@@ -112,7 +118,9 @@
       },
 
       async fetchChatAppointements() {
-        const response = await AppointementService.fetchChatAppointements()
+        const response = await AppointementService.fetchChatAppointements({
+          token: localStorage.getItem("tokenWeb")
+        })
         if (response.status === 200 && response.data.appointments.length > 0) {
           this.appointments = response.data.appointments
         } else {
@@ -124,7 +132,8 @@
       async updateAppointment(id) {
         const response = await AppointementService.updateChatAppointment({
           id: id,
-          client: this.user.user.email
+          client: this.user.user.email,
+          token: localStorage.getItem("tokenWeb"),
         })
         if (response.status === 200) {
           this.errorAppointment = 'Rendez-vous accepté'
