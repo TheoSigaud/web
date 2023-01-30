@@ -65,14 +65,6 @@
       }
     },
 
-    async mounted() {
-      // await MiddlewareService.auth({
-      //   token: localStorage.getItem("tokenWeb")
-      // }).then((res) => {
-      //   console.log(res)
-      // })
-    },
-
     methods: {
       async register() {
         if(this.passwordRegister !== this.passwordConfirmRegister) {
@@ -99,7 +91,11 @@
         }).then((res) => {
           if (res.status === 200) {
             localStorage.setItem("tokenWeb", res.data.token)
-            this.$router.push({ name: 'Home' })
+            if (res.data.role === 0) {
+              this.$router.push({ name: 'Home' })
+            }else{
+              this.$router.push({ name: 'Dashboard' })
+            }
           }else{
             this.success = 'Identifiants incorrects'
           }

@@ -1,6 +1,7 @@
 <template>
     <div>
-        <div class="container vh-100">
+        <router-view/>
+        <div class="container vh-100 text-center">
           <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
             Créer un salon
           </button>

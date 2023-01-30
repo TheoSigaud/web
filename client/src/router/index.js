@@ -9,6 +9,7 @@ import Appointement from '@/views/admin/Appointement'
 import PageNotFound from '@/views/PageNotFound'
 import MiddlewareService from '@/services/MiddlewareService'
 import Navbar from '@/components/Navbar.vue'
+import NavbarAdmin from '@/components/NavbarAdmin.vue'
 
 Vue.use(Router)
 
@@ -33,22 +34,40 @@ const router = new Router({
       ]
     },
     {
-      name: 'Dashboard',
       path: '/admin/dashboard',
       component: Dashboard,
-      meta: {requiresAuthAdmin: true}
+      meta: {requiresAuthAdmin: true},
+      children: [
+        {
+          path: '',
+          name: 'Dashboard',
+          component: NavbarAdmin
+        }
+      ]
     },
     {
-      name: 'Room',
       path: '/admin/room',
       component: Room,
-      meta: {requiresAuthAdmin: true}
+      meta: {requiresAuthAdmin: true},
+      children: [
+        {
+          path: '',
+          name: 'Room',
+          component: NavbarAdmin
+        }
+      ]
     },
     {
-      name: 'RoomChat',
       path: '/room-chat/:name',
       component: RoomChat,
-      meta: {requiresAuth: true}
+      meta: {requiresAuth: true},
+      children: [
+        {
+          path: '',
+          name: 'RoomChat',
+          component: Navbar
+        }
+      ]
     },
     {
       name: 'Appointement',
@@ -66,13 +85,14 @@ const router = new Router({
 
 router.beforeEach(async (to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth)) {
+    console.log("1")
     if (localStorage.getItem("tokenWeb") == null) {
       next('/')
     } else {
       await MiddlewareService.auth({
         token: localStorage.getItem("tokenWeb"),
       }).then((res) => {
-        if (res.status === 200) {
+        if (res.status === 200 && res.data.user.user_role === 0) {
           next()
         } else {
           next('/')
