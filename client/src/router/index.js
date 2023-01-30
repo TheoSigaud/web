@@ -8,6 +8,7 @@ import RoomChat from '@/views/RoomChat'
 import Appointement from '@/views/admin/Appointement'
 import PageNotFound from '@/views/PageNotFound'
 import MiddlewareService from '@/services/MiddlewareService'
+import Navbar from '@/components/Navbar.vue'
 
 Vue.use(Router)
 
@@ -20,10 +21,16 @@ const router = new Router({
       component: Hello
     },
     {
-      name: 'Home',
       path: '/home',
       component: Home,
-      meta: {requiresAuth: true}
+      meta: {requiresAuth: true},
+      children: [
+        {
+          path: '',
+          name: 'Home',
+          component: Navbar
+        }
+      ]
     },
     {
       name: 'Dashboard',

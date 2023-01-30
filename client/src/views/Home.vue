@@ -1,5 +1,6 @@
 <template>
     <div>
+      <router-view/>
       <div class="container">
         <h1>Bienvenue</h1>
         <p v-if="!sendReq">Avez-vous besoin d'aide ?</p>
