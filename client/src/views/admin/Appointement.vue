@@ -68,17 +68,23 @@ export default {
 
   methods: {
     async createAppointment() {
-      await AppointementService.createAppointement({
-        date: this.newAppointment.date,
-        time: this.newAppointment.time,
-        token: localStorage.getItem("tokenWeb"),
-      }).then(async () => {
-        this.success = 'Création réussie'
-        const response = await AppointementService.fetchAppointements({
-          token: localStorage.getItem("tokenWeb"),
-        })
-        this.appointments = response.data.appointments
-      })
+      if (this.newAppointment.date !== '' && this.newAppointment.time !== '') {
+        let testDate = new Date(`${this.newAppointment.date}T${this.newAppointment.time}`);
+        if (testDate > new Date()) {
+
+          await AppointementService.createAppointement({
+            date: this.newAppointment.date,
+            time: this.newAppointment.time,
+            token: localStorage.getItem("tokenWeb"),
+          }).then(async () => {
+            this.success = 'Création réussie'
+            const response = await AppointementService.fetchAppointements({
+              token: localStorage.getItem("tokenWeb"),
+            })
+            this.appointments = response.data.appointments
+          })
+        }
+      }
     },
 
     async deleteAppointment(id) {
