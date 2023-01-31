@@ -1,5 +1,6 @@
 <template>
     <div>
+      <router-view/>
       <div class="container vh-100">
         <h3>Bienvenue sur le salon : {{nameRoom}}</h3>
 

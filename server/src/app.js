@@ -49,7 +49,69 @@ db.once("open", function(callback){
   console.log("Connection Succeeded");
 });
 
+User.findOne({email:"user@gmail.com"}).then(user => {
+  if(!user) {
+    User.create({
+      email: 'user@gmail.com',
+      password: '$2b$10$3Olkmbxmxz3zDd4TCqW7UuMwe/gvTVdPcHrn5Bn3eaKPh4mFXPzES',
+      role: 0
+    });
+  }
+});
 
+User.findOne({email:"toto@gmail.com"}).then(user => {
+  if(!user) {
+    User.create({
+      email: 'toto@gmail.com',
+      password: '$2b$10$3Olkmbxmxz3zDd4TCqW7UuMwe/gvTVdPcHrn5Bn3eaKPh4mFXPzES',
+      role: 0
+    });
+  }
+});
+
+User.findOne({email:"admin@gmail.com"}).then(user => {
+  if(!user){
+    User.create({
+      email: 'admin@gmail.com',
+      password: '$2b$10$3Olkmbxmxz3zDd4TCqW7UuMwe/gvTVdPcHrn5Bn3eaKPh4mFXPzES',
+      role: 1
+    });
+  }
+});
+
+Appointement.create({
+  date: new Date(2023, 5, 2),
+  time: new Date(2023, 5, 2, 23, 0, 0)
+});
+
+Appointement.create({
+  date: new Date(2023, 5, 12),
+  time: new Date(2023, 5, 12, 23, 0, 0)
+});
+
+Appointement.create({
+  date: new Date(2023, 5, 20),
+  time: new Date(2023, 5, 20, 23, 0, 0)
+});
+
+
+Room.findOne({name:"Room 1"}).then(room => {
+  if (!room) {
+    Room.create({
+      name: 'Room 1',
+      max: 10
+    });
+  }
+})
+
+Room.findOne({name:"Room 2"}).then(room => {
+  if(!room) {
+    Room.create({
+      name: 'Room 2',
+      max: 5
+    });
+  }
+})
 app.post('/register', async (req, res) => {
 
   try {
@@ -138,8 +200,7 @@ app.post("/online", async (req, res) => {
 
 });
 
-app.post('/createRoom', async (req, res) => {
-
+app.post('/createRoom', auth, async (req, res) => {
   try {
     const {name, max} = req.body;
 
@@ -178,7 +239,7 @@ app.post('/getRooms', auth, (req, res) => {
   }).sort({_id: -1})
 });
 
-app.post('/deleteRoom', (req, res) => {
+app.post('/deleteRoom', auth, (req, res) => {
   const {name} = req.body;
 
   Room.deleteOne({
@@ -192,7 +253,7 @@ app.post('/deleteRoom', (req, res) => {
   });
 });
 
-app.post("/createAppointement", async (req, res) => {
+app.post("/createAppointement", auth, async (req, res) => {
   const date = new Date(req.body.date)
   let time = req.body.time
   const [hours, minutes] = time.split(':');
@@ -209,7 +270,7 @@ app.post("/createAppointement", async (req, res) => {
   });
 });
 
-app.get('/getAppointements', (req, res) => {
+app.post('/getAppointements', auth, (req, res) => {
   Appointement.find({}, 'date time client', function (error, appointements) {
     if (error) {
       console.error(error);
@@ -230,7 +291,7 @@ app.get('/getAppointements', (req, res) => {
   }).sort({_id: -1})
 });
 
-app.post('/deleteAppointement', (req, res) => {
+app.post('/deleteAppointement', auth, (req, res) => {
   Appointement.remove({
     _id: req.body.id
   }, function(err, post){
@@ -242,7 +303,7 @@ app.post('/deleteAppointement', (req, res) => {
   })
 });
 
-app.get('/getChatAppointements', (req, res) => {
+app.post('/getChatAppointements', auth, (req, res) => {
 
   let currentDate = new Date();
   let startOfWeek = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - currentDate.getDay() + 1);
@@ -291,7 +352,7 @@ app.get('/getChatAppointements', (req, res) => {
   });
 });
 
-app.post('/updateAppointement', (req, res) => {
+app.post('/updateAppointement', auth, (req, res) => {
   const {id, client} = req.body;
   console.log(id, client)
   Appointement.findOne({_id: id}, function (err, appointement) {
@@ -307,7 +368,7 @@ app.post('/updateAppointement', (req, res) => {
   });
 });
 
-app.post('/updateRoom', (req, res) => {
+app.post('/updateRoom', auth, (req, res) => {
   const {name, max} = req.body;
 
   Room.findOne({name}, function (err, room) {

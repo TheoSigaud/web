@@ -8,6 +8,8 @@ import RoomChat from '@/views/RoomChat'
 import Appointement from '@/views/admin/Appointement'
 import PageNotFound from '@/views/PageNotFound'
 import MiddlewareService from '@/services/MiddlewareService'
+import Navbar from '@/components/Navbar.vue'
+import NavbarAdmin from '@/components/NavbarAdmin.vue'
 
 Vue.use(Router)
 
@@ -20,34 +22,64 @@ const router = new Router({
       component: Hello
     },
     {
-      name: 'Home',
       path: '/home',
       component: Home,
-      meta: {requiresAuth: true}
+      meta: {requiresAuth: true},
+      children: [
+        {
+          path: '',
+          name: 'Home',
+          component: Navbar
+        }
+      ]
     },
     {
-      name: 'Dashboard',
       path: '/admin/dashboard',
       component: Dashboard,
-      meta: {requiresAuthAdmin: true}
+      meta: {requiresAuthAdmin: true},
+      children: [
+        {
+          path: '',
+          name: 'Dashboard',
+          component: NavbarAdmin
+        }
+      ]
     },
     {
-      name: 'Room',
       path: '/admin/room',
       component: Room,
-      meta: {requiresAuthAdmin: true}
+      meta: {requiresAuthAdmin: true},
+      children: [
+        {
+          path: '',
+          name: 'Room',
+          component: NavbarAdmin
+        }
+      ]
     },
     {
-      name: 'RoomChat',
       path: '/room-chat/:name',
       component: RoomChat,
-      meta: {requiresAuth: true}
+      meta: {requiresAuth: true},
+      children: [
+        {
+          path: '',
+          name: 'RoomChat',
+          component: Navbar
+        }
+      ]
     },
     {
-      name: 'Appointement',
       path: '/admin/appointement',
       component: Appointement,
-      meta: {requiresAuthAdmin: true}
+      meta: {requiresAuthAdmin: true},
+      children: [
+        {
+          path: '',
+          name: 'Appointement',
+          component: NavbarAdmin
+        }
+      ]
     },
     {
       name: 'PageNotFound',
@@ -59,13 +91,14 @@ const router = new Router({
 
 router.beforeEach(async (to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth)) {
+    console.log("1")
     if (localStorage.getItem("tokenWeb") == null) {
       next('/')
     } else {
       await MiddlewareService.auth({
         token: localStorage.getItem("tokenWeb"),
       }).then((res) => {
-        if (res.status === 200) {
+        if (res.status === 200 && res.data.user.user_role === 0) {
           next()
         } else {
           next('/')

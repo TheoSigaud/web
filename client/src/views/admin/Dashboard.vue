@@ -1,6 +1,7 @@
 <template>
     <div>
-        <div class="container vh-100">
+        <router-view/>
+        <div class="container vh-100 text-center">
             <h1>Dashboard</h1>
 
             <button class="btn btn-danger" v-if="onlineStatus === 'Online'" @click="toggleOnlineStatus">Me rendre indisponible</button>

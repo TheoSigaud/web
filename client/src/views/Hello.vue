@@ -65,27 +65,23 @@
       }
     },
 
-    async mounted() {
-      // await MiddlewareService.auth({
-      //   token: localStorage.getItem("tokenWeb")
-      // }).then((res) => {
-      //   console.log(res)
-      // })
-    },
-
     methods: {
       async register() {
-        await UsersService.register({
-          email: this.emailRegister,
-          password: this.passwordRegister,
-        }).then((res) => {
-          if (res.status === 201) {
-            this.success = 'Inscription réussie'
-          } else {
-            console.log(res)
-            this.success = res.data
-          }
-        })
+        if(this.passwordRegister !== this.passwordConfirmRegister) {
+          this.success = 'Les mots de passe ne correspondent pas'
+        }else {
+          await UsersService.register({
+            email: this.emailRegister,
+            password: this.passwordRegister,
+          }).then((res) => {
+            if (res.status === 201) {
+              this.success = 'Inscription réussie'
+            } else {
+              console.log(res)
+              this.success = res.data
+            }
+          })
+        }
       },
 
       async signInWithEmail() {
@@ -95,7 +91,11 @@
         }).then((res) => {
           if (res.status === 200) {
             localStorage.setItem("tokenWeb", res.data.token)
-            this.$router.push({ name: 'Home' })
+            if (res.data.role === 0) {
+              this.$router.push({ name: 'Home' })
+            }else{
+              this.$router.push({ name: 'Dashboard' })
+            }
           }else{
             this.success = 'Identifiants incorrects'
           }
