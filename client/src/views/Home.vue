@@ -3,7 +3,8 @@
       <div class="container">
         <h1>Bienvenue</h1>
         <p v-if="!sendReq">Avez-vous besoin d'aide ?</p>
-        <button v-if="!sendReq" class="btn btn-primary" @click="sendRequest">Oui</button>
+        <button v-if="!sendReq && onlineUsers === 0" class="btn btn-primary" disabled>Aucun conseiller disponible</button>
+        <button v-if="!sendReq && onlineUsers > 0" class="btn btn-primary" @click="sendRequest">Oui</button>
         <p v-if="sendReq && !showChat">Une demande a été envoyé</p>
         <p v-if="showChat">Vous êtes en communication avec un administrateur</p>
 
@@ -24,6 +25,10 @@
         </div>
         <Chatbot />
         <RoomUser />
+        <h2>Notification </h2>
+        <ul>
+          <li v-for="(message, idx) in messages" :key="idx">{{ message }}</li>
+        </ul>
       </div>
     </div>
 </template>
@@ -42,7 +47,9 @@
       return {
         user: null,
         sendReq: false,
-        showChat: false
+        showChat: false,
+        messages: [],
+        onlineUsers: 0
       }
     },
     async mounted() {
@@ -56,6 +63,10 @@
         this.showChat = true
         this.$refs.myButton.click();
       })
+      const source = new EventSource('http://localhost:8081/notification');
+      source.onmessage = (event) => {
+        this.messages.push(event.data);
+      };
     },
 
     methods: {
@@ -65,6 +76,11 @@
       },
 
     },
-
+    created(){
+      this.$socket.on('updateOnlineUsers', (onlineUsers) => {
+        this.onlineUsers = onlineUsers
+        console.log(this.onlineUsers)
+      });
+    }
   }
 </script>

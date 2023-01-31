@@ -13,6 +13,13 @@
             </div>
 
             <Chat v-if="currentRoom" :room="currentRoom" :email="user.user.email"/>
+
+            <h2>Message</h2>
+            {{ message }}
+
+
+            <input id="content" v-model="content" type="text">
+            <button id="submitContent" @click="sendNotif">ok</button>
         </div>
     </div>
 </template>
@@ -31,7 +38,9 @@
         currentRoom: null,
         onlineStatus: 'Offline',
         onlineUsers: 0,
-        user: null
+        user: null,
+        message: '',
+        content: ''
       }
     },
 
@@ -44,8 +53,10 @@
 
       await this.checkRequests()
     },
-
     methods: {
+      async sendNotif(){
+        this.$socket.emit('notification', this.content)
+      },
       async checkRequests() {
         this.$socket.on('request', data => {
           if (!this.users.includes(data.user.email)) {
@@ -73,7 +84,7 @@
           this.onlineStatus = 'Offline';
           this.onlineUsers = this.$data.onlineUsers;
         }
-      },
+      }
     },
     created(){
       this.$socket.on('updateOnlineUsers', (onlineUsers) => {

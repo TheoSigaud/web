@@ -90,4 +90,16 @@ module.exports = function (io, app) {
     res.send({ onlineUsers });
   });
 
+  app.get('/notification', (req, res) => {
+    console.log('Entrer dans les Notifications');
+    res.set({
+      'Content-Type': 'text/event-stream',
+      'Cache-Control': 'no-cache',
+      Connection: 'keep-alive',
+    });
+
+    setInterval(() => {
+      res.write(`data: Welcome en temps réel\n\n`);
+    }, 5000);
+  });
 }
