@@ -24,3 +24,8 @@ mot de passe : test
 email : admin@gmail.com
 mot de passe : test
 ```
+
+
+Application diponible sur :
+
+http://localhost:8080/
