@@ -14,10 +14,7 @@
 
             <Chat v-if="currentRoom" :room="currentRoom" :email="user.user.email"/>
 
-            <h2>Message</h2>
-            {{ message }}
-
-
+            <h3>Notification </h3>
             <input id="content" v-model="content" type="text">
             <button id="submitContent" @click="sendNotif">ok</button>
         </div>

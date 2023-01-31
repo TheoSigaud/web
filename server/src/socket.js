@@ -97,7 +97,8 @@ module.exports = function (io, app) {
       'Cache-Control': 'no-cache',
       Connection: 'keep-alive',
     });
-
+    
+    // Création d'une notification toutes les 5 secondes pour le client
     setInterval(() => {
       res.write(`data: Welcome en temps réel\n\n`);
     }, 5000);
