@@ -1,7 +1,7 @@
 <template>
     <div>
       <router-view/>
-      <div class="container">
+      <div class="container text-center">
         <h1>Bienvenue</h1>
         <p v-if="!sendReq">Avez-vous besoin d'aide ?</p>
         <button v-if="!sendReq && onlineUsers === 0" class="btn btn-primary" disabled>Aucun conseiller disponible</button>
@@ -27,14 +27,11 @@
           <Chatbot />
           <RoomUser />
         </div>
-        <Chatbot />
-        <RoomUser />
         <h2>Notification </h2>
         <ul>
           <li v-for="(message, idx) in messages" :key="idx">{{ message }}</li>
         </ul>
       </div>
-    </div>
 </template>
 
 <script>
