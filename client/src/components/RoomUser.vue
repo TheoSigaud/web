@@ -40,7 +40,6 @@
       })
 
       this.$socket.on('sendLengthUsers', message => {
-        console.log(message.length)
         if (message.length >= message.max) {
           this.errorRoom = 'Le salon est complet'
         }else {

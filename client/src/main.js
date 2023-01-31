@@ -5,11 +5,22 @@ import App from './App'
 import router from './router'
 import { io } from "socket.io-client"
 
-const socket = io("ws://localhost:8081")
-Vue.prototype.$socket = socket;
-socket.on("connect", () => {
-  console.log("Connected to the socket")
-})
+let socket;
+router.beforeEach((to, from, next) => {
+  if (to.path !== '/') {
+    socket = io("ws://localhost:8081", {
+      auth: {
+        token: localStorage.getItem("tokenWeb")
+      }
+    })
+    Vue.prototype.$socket = socket;
+    socket.on("connect", () => {
+      console.log("Connected to the socket")
+    })
+  }
+  next();
+});
+
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */

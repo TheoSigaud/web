@@ -91,7 +91,6 @@ const router = new Router({
 
 router.beforeEach(async (to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth)) {
-    console.log("1")
     if (localStorage.getItem("tokenWeb") == null) {
       next('/')
     } else {
