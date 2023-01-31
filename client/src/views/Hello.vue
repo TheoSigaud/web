@@ -77,7 +77,6 @@
             if (res.status === 201) {
               this.success = 'Inscription réussie'
             } else {
-              console.log(res)
               this.success = res.data
             }
           })

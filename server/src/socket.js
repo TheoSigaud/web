@@ -1,8 +1,33 @@
 const _ = require("lodash");
+const jwt = require("jsonwebtoken");
+
+const config = process.env;
+
+function verifyToken(token) {
+  if (!token) {
+    return false
+  }else {
+    try {
+      return jwt.verify(token, config.TOKEN_KEY);
+    } catch (err) {
+      return false;
+    }
+  }
+};
+
 
 module.exports = function (io, app) {
   let users = {};
   let onlineUsers = 0;
+
+  io.use((socket, next) => {
+    if (!verifyToken(socket.handshake.auth.token)) {
+      throw new Error("Unauthorized client")
+    }
+
+    next()
+  })
+
   io.on('connection', function(socket){
 
     socket.on('online', (status) => {
