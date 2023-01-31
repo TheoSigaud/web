@@ -108,14 +108,4 @@ module.exports = function (io, app) {
       io.emit('updateOnlineUsers', onlineUsers);
     });
   });
-
-  app.post('/online', (req, res) => {
-    // Incrémenter le compteur d'utilisateurs en ligne
-    onlineUsers++;
-  
-    // Envoyer la mise à jour du nombre d'utilisateurs en ligne à tous les clients connectés
-    io.emit('updateOnlineUsers', onlineUsers);
-    
-    res.send({ onlineUsers });
-  });
 }
