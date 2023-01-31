@@ -1,5 +1,8 @@
 ## Pour lancer l'application utilisez :
 
+Créer un fichier .env dans le dossier server avec comme contenu
+TOKEN_KEY=''
+
 ```
 docker compose up
 ```
