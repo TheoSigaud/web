@@ -13,7 +13,7 @@ function verifyToken(token) {
       return false;
     }
   }
-};
+}
 
 
 module.exports = function (io, app) {
