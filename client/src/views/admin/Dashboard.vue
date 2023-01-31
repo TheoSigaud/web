@@ -15,9 +15,9 @@
 
             <Chat v-if="currentRoom" :room="currentRoom" :email="user.user.email"/>
 
-            <h3>Notification </h3>
-            <input id="content" v-model="content" type="text">
-            <button id="submitContent" @click="sendNotif">ok</button>
+            <h3 class="mt-5">Notification </h3>
+            <input id="content" class="form-control" v-model="content" type="text">
+            <button class="btn btn-primary" id="submitContent" @click="sendNotif">Envoyer</button>
         </div>
     </div>
 </template>
@@ -53,7 +53,7 @@
     },
     methods: {
       async sendNotif(){
-        this.$socket.emit('notification', this.content)
+        this.$socket.emit('notifications', this.content)
       },
       async checkRequests() {
         this.$socket.on('request', data => {

@@ -59,6 +59,10 @@ module.exports = function (io, app) {
       io.to(message.room).emit('message', message)
     });
 
+    socket.on('notifications', message => {
+      socket.broadcast.emit('receiveNotification', message);
+    });
+
     //JOIN CHAT ROOM
     socket.on('joinRoomChat', function(data){
       socket.email = data.email;
@@ -113,19 +117,5 @@ module.exports = function (io, app) {
     io.emit('updateOnlineUsers', onlineUsers);
     
     res.send({ onlineUsers });
-  });
-
-  app.get('/notification', (req, res) => {
-    console.log('Entrer dans les Notifications');
-    res.set({
-      'Content-Type': 'text/event-stream',
-      'Cache-Control': 'no-cache',
-      Connection: 'keep-alive',
-    });
-    
-    // Création d'une notification toutes les 5 secondes pour le client
-    setInterval(() => {
-      res.write(`data: Welcome en temps réel\n\n`);
-    }, 5000);
   });
 }

@@ -27,10 +27,10 @@
           <Chatbot />
           <RoomUser />
         </div>
-        <h2>Notification </h2>
-        <ul>
-          <li v-for="(message, idx) in messages" :key="idx">{{ message }}</li>
-        </ul>
+        <h2 class="text-center">Notification </h2>
+        <div v-if="messages" class="alert alert-danger" role="alert">
+           {{messages}}
+        </div>
       </div>
 </template>
 
@@ -49,7 +49,7 @@
         user: null,
         sendReq: false,
         showChat: false,
-        messages: [],
+        messages: null,
         onlineUsers: 0
       }
     },
@@ -64,10 +64,10 @@
         this.showChat = true
         this.$refs.myButton.click();
       })
-      const source = new EventSource('http://localhost:8081/notification');
-      source.onmessage = (event) => {
-        this.messages.push(event.data);
-      };
+
+      this.$socket.on('receiveNotification', message => {
+        this.messages = message;
+      })
     },
 
     methods: {
