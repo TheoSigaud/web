@@ -1,6 +1,7 @@
 <template>
     <div>
       <router-view/>
+      <Alert />
       <div class="container text-center">
         <h1>Bienvenue</h1>
         <p v-if="!sendReq">Avez-vous besoin d'aide ?</p>
@@ -27,10 +28,6 @@
           <Chatbot />
           <RoomUser />
         </div>
-        <h2 class="text-center">Notification </h2>
-        <div v-if="messages" class="alert alert-danger" role="alert">
-           {{messages}}
-        </div>
       </div>
 </template>
 
@@ -39,10 +36,11 @@
   import Chat from "../components/Chat";
   import RoomUser from "../components/RoomUser";
   import Chatbot from '../components/Chatbot.vue';
+  import Alert from '../components/Alert.vue';
 
   export default {
     name: "Home",
-    components: {Chat, Chatbot, RoomUser},
+    components: {Chat, Chatbot, RoomUser, Alert},
 
     data () {
       return {
@@ -63,10 +61,6 @@
       this.$socket.on('requestAccepted', message => {
         this.showChat = true
         this.$refs.myButton.click();
-      })
-
-      this.$socket.on('receiveNotification', message => {
-        this.messages = message;
       })
     },
 

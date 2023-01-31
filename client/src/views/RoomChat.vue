@@ -1,6 +1,7 @@
 <template>
     <div>
       <router-view/>
+      <Alert />
       <div class="container vh-100">
         <h3>Bienvenue sur le salon : {{nameRoom}}</h3>
 
@@ -17,10 +18,11 @@
 <script>
   import MiddlewareService from '@/services/MiddlewareService'
   import ChatRoom from "../components/ChatRoom";
+  import Alert from "../components/Alert";
 
   export default {
     name: "RoomChat",
-    components: {ChatRoom},
+    components: {ChatRoom, Alert},
 
     data () {
       return {
